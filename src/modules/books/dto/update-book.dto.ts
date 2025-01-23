@@ -3,12 +3,13 @@ import { PartialType } from '@nestjs/mapped-types';
 import { CreateBookDto } from './create-book.dto';
 import { IsNumber, IsString } from 'class-validator';
 import { Optional } from '@nestjs/common';
+import { IntegerType } from 'typeorm';
 
 export class UpdateBookDto extends PartialType(CreateBookDto) {
 
         @Optional()
         @IsNumber()
-         book_id:BigInteger;
+        book_id:IntegerType;
     
         @Optional()
         @IsString()
@@ -28,11 +29,11 @@ export class UpdateBookDto extends PartialType(CreateBookDto) {
             
          @Optional()
          @IsNumber()
-         isbn: BigInteger;
+         isbn: IntegerType;
         
          @Optional()
          @IsNumber()
-         category_id :BigInteger;
+         category_id :IntegerType;
         
          @Optional()
          @IsNumber()

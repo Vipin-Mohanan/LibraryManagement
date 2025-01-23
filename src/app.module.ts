@@ -1,11 +1,12 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { BooksModule } from './books/books.module';
-import { CategoriesModule } from './categories/categories.module';
+import { BooksModule } from './modules/books/books.module';
+import { CategoriesModule } from './modules/categories/categories.module';
+import { BorrowTransactionsModule } from './modules/borrow_transactions/borrow_transactions.module';
 
 @Module({
-  imports: [BooksModule, CategoriesModule],
+  imports: [BooksModule, CategoriesModule, BorrowTransactionsModule],
   controllers: [AppController],
   providers: [AppService],
 })
