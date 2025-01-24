@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Test, TestingModule } from '@nestjs/testing';
 import { FinesController } from './fines.controller';
 import { FinesService } from './fines.service';
