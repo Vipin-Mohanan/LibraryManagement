@@ -1,45 +1,45 @@
 /* eslint-disable prettier/prettier */
 
-import { IsEmpty } from "class-validator";
-import { Column, Entity, PrimaryGeneratedColumn, } from "typeorm";
+
+import { Column, Entity, IntegerType, PrimaryGeneratedColumn, } from "typeorm";
 
 @Entity()
 export class Book {
 
        @PrimaryGeneratedColumn()
-        book_id:BigInteger
+        book_id:IntegerType
 
-        @IsEmpty()
+
         @Column()
         title: string
         
-        @IsEmpty()
+      
         @Column()
         author: string
 
-        @IsEmpty()
+   
         @Column()
         publisher: string
 
-        @IsEmpty()
+       
         @Column()
         publication_year: string 
 
-        @IsEmpty()
-        @Column()
-        isbn: number
 
-        @IsEmpty()
         @Column()
-        category_id :BigInteger
+        isbn: IntegerType
 
-        @IsEmpty()
+      
         @Column()
-        copies_available: number
+        category_id :IntegerType
 
-        @IsEmpty()
+       
         @Column()
-        total_copies: number
+        copies_available: IntegerType
+
+       
+        @Column()
+        total_copies: IntegerType
 }
 
 

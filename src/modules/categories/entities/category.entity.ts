@@ -1,18 +1,14 @@
 /* eslint-disable prettier/prettier */
 
-import { IsEmpty, IsNumber, IsString } from "class-validator";
+import { Column, Entity, IntegerType, PrimaryGeneratedColumn } from "typeorm";
 
 
-
-
-
+@Entity()
 export class Category {
 
-    @IsNumber()
-    @IsEmpty()
-    category_id : bigint;
+   @PrimaryGeneratedColumn()
+    category_id : IntegerType;
 
-    @IsEmpty()
-    @IsString()
+    @Column()
     category_name: string;
 }

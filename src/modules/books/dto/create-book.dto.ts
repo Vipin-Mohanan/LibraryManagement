@@ -1,12 +1,12 @@
 /* eslint-disable prettier/prettier */
 
 import { IsNumber,IsString } from "class-validator";
-import { IntegerType } from "typeorm";
+
 
 export class CreateBookDto {
 
     @IsNumber()
-     book_id:IntegerType;
+     book_id:number;
 
     @IsString()
      title: string;
@@ -21,10 +21,10 @@ export class CreateBookDto {
      publication_year: string ;
         
      @IsNumber()
-     isbn: IntegerType;
+     isbn: number;
     
      @IsNumber()
-     category_id :IntegerType;
+     category_id :number;
     
      @IsNumber()
      copies_available: number;
