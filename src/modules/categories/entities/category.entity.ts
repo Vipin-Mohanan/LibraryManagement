@@ -1,18 +1,22 @@
 /* eslint-disable prettier/prettier */
 
-import { IsEmpty, IsNumber, IsString } from "class-validator";
+import { Book } from "src/modules/books/entities/book.entity";
+import { Column, Entity, IntegerType, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 
-
-
-
+@Entity()
 export class Category {
 
-    @IsNumber()
-    @IsEmpty()
-    category_id : bigint;
+   @PrimaryGeneratedColumn({name:"category_id"})
+    category_id : number;
 
-    @IsEmpty()
-    @IsString()
+    @Column()
     category_name: string;
+
+
+     // Define the One-to-Many relationship with Book
+     @OneToMany(() => Book, (book) => book.category)
+     books: Book[];
+
+     
 }

@@ -1,18 +1,17 @@
 /* eslint-disable prettier/prettier */
 import { IsDate, IsNumber } from 'class-validator';
-import { IntegerType } from 'typeorm';
 /* eslint-disable prettier/prettier */
 export class CreateBorrowTransactionDto {
 
 
     @IsNumber()
-    transaction_id:IntegerType
+    transaction_id:number
 
     @IsNumber()
-    book_id :IntegerType
+    book_id :number
 
     @IsNumber()
-    user_id :IntegerType
+    user_id :number
 
     @IsDate()
     borrow_date:Date

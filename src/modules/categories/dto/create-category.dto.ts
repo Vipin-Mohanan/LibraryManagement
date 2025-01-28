@@ -1,11 +1,11 @@
 /* eslint-disable prettier/prettier */
 
-import { Column, PrimaryColumn } from 'typeorm';
+import { Column, PrimaryGeneratedColumn } from 'typeorm';
 
 export class CreateCategoryDto {
 
-    @PrimaryColumn()
-    category_id : bigint;
+    @PrimaryGeneratedColumn()
+    category_id : number;
 
     @Column()
     category_name: string;
