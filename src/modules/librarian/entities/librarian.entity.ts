@@ -1,11 +1,11 @@
 /* eslint-disable prettier/prettier */
 import { IsEmpty } from "class-validator";
-import { Column, Entity, IntegerType, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity,PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Librarian {
         @PrimaryGeneratedColumn()
-        librarian_id:IntegerType
+        librarian_id:number
     
         @IsEmpty()
         @Column()

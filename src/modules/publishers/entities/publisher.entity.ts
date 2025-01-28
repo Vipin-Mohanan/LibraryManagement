@@ -1,12 +1,12 @@
 /* eslint-disable prettier/prettier */
 import { IsEmpty } from "class-validator";
-import { Column, Entity, IntegerType, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Publisher {
 
         @PrimaryGeneratedColumn()
-        publisher_id:IntegerType
+        publisher_id:number
     
         @IsEmpty()
         @Column()
