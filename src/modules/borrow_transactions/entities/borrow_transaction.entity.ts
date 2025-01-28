@@ -1,5 +1,8 @@
 /* eslint-disable prettier/prettier */
-import { Column, Entity, IntegerType, PrimaryGeneratedColumn } from "typeorm"
+import { Book } from 'src/modules/books/entities/book.entity';
+import { Fine } from 'src/modules/fines/entities/fine.entity';
+import { User } from 'src/modules/user/entities/user.entity';
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm"
 
 
 
@@ -7,15 +10,21 @@ import { Column, Entity, IntegerType, PrimaryGeneratedColumn } from "typeorm"
 export class BorrowTransaction {
 
     
-        @PrimaryGeneratedColumn()
-        transaction_id:IntegerType
+        @PrimaryGeneratedColumn({name:"transaction_id"})
+        transaction_id:number
     
-        @Column()
-        book_id :IntegerType
-    
-        @Column()
-        user_id :IntegerType
-    
+   
+        @ManyToOne(()=>Book,(book)=>book.borrowTransactions,{ onDelete: 'CASCADE' })
+        @JoinColumn({name:'book_id', referencedColumnName:'book_id'})
+        books:Book[]
+
+
+
+        @ManyToOne(() => User, (user) => user.borrowtransactions, { onDelete: 'CASCADE' })
+        @JoinColumn({ name: 'user_id',  referencedColumnName: 'user_id' })
+        user: User;
+
+
         @Column()
         borrow_date:Date
     
@@ -27,6 +36,12 @@ export class BorrowTransaction {
     
         @Column()
         status:string
+    
+
+       @OneToOne(()=>Fine, (fine)=>fine.borrowTransaction)
+       fine: Fine[];
+
+
     
     
 }

@@ -32,4 +32,7 @@ export class CreateBookDto {
      @IsNumber()
      total_copies: number;
 
+
+     
+
 }

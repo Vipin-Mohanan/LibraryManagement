@@ -8,7 +8,7 @@ export class UpdateCategoryDto extends PartialType(CreateCategoryDto) {
 
         @Optional()
         @PrimaryColumn()
-        category_id : bigint;
+        category_id : number;
     
         @Optional()
         @Column()

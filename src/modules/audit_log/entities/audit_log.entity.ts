@@ -1,20 +1,22 @@
 /* eslint-disable prettier/prettier */
 
-import { Column, Entity, IntegerType, PrimaryGeneratedColumn, Timestamp } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 
 @Entity()
 export class AuditLog {
 
     @PrimaryGeneratedColumn()
-    log_id :IntegerType;
+    log_id :number;
 
     @Column()
     action_performed:string;
 
     @Column()
-    user_id:IntegerType;
+    user_id:number;
 
-    @Column()
-    timestamp:Timestamp
+    
+    @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+    timestamp: Date;
+
 }

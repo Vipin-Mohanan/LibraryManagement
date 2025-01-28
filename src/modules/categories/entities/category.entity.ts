@@ -1,14 +1,22 @@
 /* eslint-disable prettier/prettier */
 
-import { Column, Entity, IntegerType, PrimaryGeneratedColumn } from "typeorm";
+import { Book } from "src/modules/books/entities/book.entity";
+import { Column, Entity, IntegerType, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 
 @Entity()
 export class Category {
 
-   @PrimaryGeneratedColumn()
-    category_id : IntegerType;
+   @PrimaryGeneratedColumn({name:"category_id"})
+    category_id : number;
 
     @Column()
     category_name: string;
+
+
+     // Define the One-to-Many relationship with Book
+     @OneToMany(() => Book, (book) => book.category)
+     books: Book[];
+
+     
 }

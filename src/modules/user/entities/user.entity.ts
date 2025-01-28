@@ -1,11 +1,13 @@
 /* eslint-disable prettier/prettier */
 import { IsEmpty } from "class-validator";
-import { Column, Entity, IntegerType, PrimaryGeneratedColumn } from "typeorm";
+import { BorrowTransaction } from "src/modules/borrow_transactions/entities/borrow_transaction.entity";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Reservation } from 'src/modules/reservations/entities/reservation.entity';
 
 @Entity()
 export class User {
         @PrimaryGeneratedColumn()
-        user_id:IntegerType
+        user_id:number
     
         @Column()
         @IsEmpty()
@@ -31,4 +33,9 @@ export class User {
         @IsEmpty()
         membership_status:boolean
    
+        @OneToMany(() => BorrowTransaction, (borrowTransaction) => borrowTransaction.user)
+        borrowtransactions: BorrowTransaction[];
+
+        @OneToMany(()=>Reservation,(reservation)=>reservation.users)
+        reservation:Reservation[]
 }

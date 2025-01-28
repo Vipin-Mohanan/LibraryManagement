@@ -4,7 +4,7 @@ import { IsDate, IsNumber, IsString } from "class-validator";
 export class CreateAuditLogDto {
 
 
-      @IsNumber()
+        @IsNumber()
         log_id :number;
     
         @IsString()

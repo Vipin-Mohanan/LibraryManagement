@@ -1,46 +1,46 @@
 /* eslint-disable prettier/prettier */
 
-
-import { Column, Entity, IntegerType, PrimaryGeneratedColumn, } from "typeorm";
+import { BorrowTransaction } from "src/modules/borrow_transactions/entities/borrow_transaction.entity";
+import { Category } from "src/modules/categories/entities/category.entity";
+import { Reservation } from 'src/modules/reservations/entities/reservation.entity';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Book {
+  @PrimaryGeneratedColumn({ name: "book_id" })
+  book_id: number;
 
-       @PrimaryGeneratedColumn()
-        book_id:IntegerType
+  @Column()
+  title: string;
 
+  @Column()
+  author: string;
 
-        @Column()
-        title: string
-        
-      
-        @Column()
-        author: string
+  @Column()
+  publisher: string;
 
-   
-        @Column()
-        publisher: string
+  @Column()
+  publication_year: string;
 
-       
-        @Column()
-        publication_year: string 
+  @Column()
+  isbn: string; // Changed to string for better compatibility with ISBN formats
 
+  // Define the Many-to-One relationship with Category
+  @ManyToOne(() => Category, (category) => category.books, { onDelete: "CASCADE" })
+  @JoinColumn({ name: "category_id" }) // Maps the foreign key column
+  category: Category;
 
-        @Column()
-        isbn: IntegerType
+  @Column({ name: "copies_available", type: "int" })
+  copies_available: number; // Fixed the typo and defined the column type
 
-      
-        @Column()
-        category_id :IntegerType
+  @Column({ name: "total_copies", type: "int" })
+  total_copies: number;
 
-       
-        @Column()
-        copies_available: IntegerType
+  // Define the One-to-Many relationship with BorrowTransaction
+  @OneToMany(() => BorrowTransaction, (borrowTransaction) => borrowTransaction.books)
+  borrowTransactions: BorrowTransaction[];
 
-       
-        @Column()
-        total_copies: IntegerType
+  // Define the One-to-Many relationship with Reservation
+  @OneToMany(() => Reservation, (reservation) => reservation.books)
+  reservations: Reservation[];
 }
-
-
-        // category_id (Foreign Key): Links to the Categories table.
