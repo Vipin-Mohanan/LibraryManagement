@@ -1,8 +1,9 @@
 /* eslint-disable prettier/prettier */
 import { IsEmpty } from "class-validator";
 import { BorrowTransaction } from "src/modules/borrow_transactions/entities/borrow_transaction.entity";
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Reservation } from 'src/modules/reservations/entities/reservation.entity';
+
 
 @Entity()
 export class User {
@@ -16,6 +17,10 @@ export class User {
         @Column()
         @IsEmpty()
         email:string
+
+        @Column()
+        @IsEmpty()
+        password:string
     
         @Column()
         @IsEmpty()
@@ -25,13 +30,11 @@ export class User {
         @IsEmpty()
         address:string
     
-        @Column()
-        @IsEmpty()
-        membership_date:Date
-    
-        @Column()
-        @IsEmpty()
-        membership_status:boolean
+        @CreateDateColumn({ type: 'timestamp' })  // Auto inserts current timestamp
+        membership_date: Date;
+      
+        @Column({ type: 'boolean', default: true })  // Default value is true
+        membership_status: boolean;
    
         @OneToMany(() => BorrowTransaction, (borrowTransaction) => borrowTransaction.user)
         borrowtransactions: BorrowTransaction[];
