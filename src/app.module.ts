@@ -22,6 +22,7 @@ import { PublishersModule } from './modules/publishers/publishers.module';
 import { UserModule } from './modules/user/user.module';
 import { DataSource } from 'typeorm';
 import { BorrowTransactionsModule } from './modules/borrow_transactions/borrow_transactions.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -35,7 +36,7 @@ import { BorrowTransactionsModule } from './modules/borrow_transactions/borrow_t
       entities: [User,Book,Publisher,Reservation,Publisher,Fine,AuditLog,Librarian,Category,BorrowTransaction],
       synchronize: false,
     }),
-    UserModule,BooksModule,PublishersModule,ReservationsModule,FinesModule,AuditLogModule,LibrarianModule,CategoriesModule,BorrowTransactionsModule
+    UserModule,BooksModule,PublishersModule,ReservationsModule,FinesModule,AuditLogModule,LibrarianModule,CategoriesModule,BorrowTransactionsModule, AuthModule
   ],
   controllers: [AppController],
   providers: [AppService],
