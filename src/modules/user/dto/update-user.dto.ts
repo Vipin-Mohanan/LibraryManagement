@@ -16,7 +16,8 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
         @IsOptional()
         @IsString()
         email:string
-    
+
+       
         @IsOptional()
         @IsNumber()
         phone_number:number
@@ -25,9 +26,6 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
         @IsString()
         address:string
     
-        @IsOptional()
-        @IsDate()
-        membership_date:Date
     
         @IsOptional()
         @IsBoolean()
