@@ -1,15 +1,19 @@
 /* eslint-disable prettier/prettier */
-import { IsBoolean, IsNumber, IsString } from "class-validator"
+import { IsEmail, IsEnum, IsNumber, IsString } from "class-validator"
+
+export enum librarianRole{
+    Librarian = 'librarian',
+    Admin = 'admin'
+}
 
 export class CreateLibrarianDto {
 
-    @IsNumber()
-    librarian_id:number
+ 
 
     @IsString()
     name:string
 
-    @IsString()
+    @IsEmail()
     email:string
 
     @IsNumber()
@@ -18,8 +22,14 @@ export class CreateLibrarianDto {
     @IsString()
     address:string
 
-    @IsBoolean()
-    role:boolean
+    @IsString()
+    password:string
+
+    @IsString()
+    confirmPassword:string
+
+    @IsEnum(librarianRole)
+    role:librarianRole
 
 }
 
