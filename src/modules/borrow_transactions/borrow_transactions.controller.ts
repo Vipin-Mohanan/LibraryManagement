@@ -12,9 +12,9 @@ export class BorrowTransactionsController {
     return await this.borrowTransactionsService.borrowBook(borrowdto)
   }
   
-  @Get('/viewBorrowBooks')
-  async borrowBookDetails(){
-    return this.borrowTransactionsService.borrowBookDetails(1);
+  @Get('/viewBorrowBooks/:id')
+  async borrowBookDetails(@Param('id') id :number){
+    return this.borrowTransactionsService.borrowBookDetails(id);
 
   }
 
