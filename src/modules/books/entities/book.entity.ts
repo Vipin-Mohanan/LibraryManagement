@@ -38,8 +38,8 @@ export class Book {
 
 //image
 
-  @Column({type:'jsonb', nullable:true})
-  images : string[];
+  // @Column({type:'jsonb', nullable:true})
+  // images : string[];
 
 
   // Define the One-to-Many relationship with BorrowTransaction
