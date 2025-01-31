@@ -1,29 +1,27 @@
 /* eslint-disable prettier/prettier */
-import { IsDate, IsNumber } from 'class-validator';
+import { IsDate, IsNumber, IsOptional, IsString } from 'class-validator';
 /* eslint-disable prettier/prettier */
 export class CreateBorrowTransactionDto {
 
 
-    @IsNumber()
-    transaction_id:number
-
+  
     @IsNumber()
     book_id :number
 
     @IsNumber()
     user_id :number
 
-    @IsDate()
-    borrow_date:Date
+    @IsOptional()
+    borrow_date:string | null;
 
-    @IsDate()
-    due_date:Date
+    @IsOptional()
+    due_date:string | null;
 
-    @IsDate()
-    return_date:Date
-
-    @IsDate()
+    @IsString()
     status:string
+
+    @IsOptional() // Allows return_date to be omitted or set as null
+    return_date?: string | null;
 
 
 }

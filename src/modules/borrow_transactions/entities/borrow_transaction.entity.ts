@@ -2,7 +2,7 @@
 import { Book } from 'src/modules/books/entities/book.entity';
 import { Fine } from 'src/modules/fines/entities/fine.entity';
 import { User } from 'src/modules/user/entities/user.entity';
-import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm"
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm"
 
 
 
@@ -16,7 +16,7 @@ export class BorrowTransaction {
    
         @ManyToOne(()=>Book,(book)=>book.borrowTransactions,{ onDelete: 'CASCADE' })
         @JoinColumn({name:'book_id', referencedColumnName:'book_id'})
-        books:Book[]
+        books:Book;
 
 
 
@@ -25,14 +25,21 @@ export class BorrowTransaction {
         user: User;
 
 
-        @Column()
-        borrow_date:Date
+
+        //  @CreateDateColumn({ type: 'timestamp' })  // Auto inserts current timestamp
+        //  borrow_date: Date;
+              
+        @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+        borrow_date: Date;
     
-        @Column()
-        due_date:Date
     
-        @Column()
-        return_date:Date
+         @CreateDateColumn({ type: 'timestamp' })  // Auto inserts current timestamp
+         due_date: Date;
+      
+         @CreateDateColumn({ type: 'timestamp' })  // Auto inserts current timestamp
+         return_date: Date;
+    
+       
     
         @Column()
         status:string

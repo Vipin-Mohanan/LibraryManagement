@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, Put, ParseIntPipe } from '@nestjs/common';
 import { BooksService } from './books.service';
 import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
@@ -8,28 +8,30 @@ import { UpdateBookDto } from './dto/update-book.dto';
 export class BooksController {
   constructor(private readonly booksService: BooksService) {}
 
-  @Post()
-  create(@Body() createBookDto: CreateBookDto) {
-    return this.booksService.create(createBookDto);
+  @Post('/addBook')
+  async addBook(@Body() createBookDto: CreateBookDto) {
+    return await this.booksService.addBook(createBookDto);
   }
 
-  @Get()
-  findAll() {
-    return this.booksService.findAll();
+  @Get('/getAllBooks')
+  async getAllBooks(){
+    return await this.booksService.getAllBooks()
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.booksService.findOne(+id);
+  @Get('/getBooksById/:id')
+  async getBookById(@Param('id') id:number){
+    return await this.booksService.getBooksById(id)
+  }
+  
+
+  @Get('/searchBook')
+  async searchchBook(@Query('query')  query:string){
+    return await this.booksService.searchBook(query)
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateBookDto: UpdateBookDto) {
-    return this.booksService.update(+id, updateBookDto);
+  @Patch('/editBookDetails/:id')
+  async editBookDetails(@Param('id') id:number,@Body() bookdto:UpdateBookDto){
+    return await this.booksService.editBookDetails(+id,bookdto)
   }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.booksService.remove(+id);
-  }
+  
 }

@@ -1,26 +1,79 @@
+/* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { BorrowTransaction } from './entities/borrow_transaction.entity';
+import { Repository } from 'typeorm';
+import { Book } from '../books/entities/book.entity';
 import { CreateBorrowTransactionDto } from './dto/create-borrow_transaction.dto';
-import { UpdateBorrowTransactionDto } from './dto/update-borrow_transaction.dto';
+import { User } from '../user/entities/user.entity';
+import { addDays } from 'date-fns';
+
 
 @Injectable()
 export class BorrowTransactionsService {
-  create(createBorrowTransactionDto: CreateBorrowTransactionDto) {
-    return 'This action adds a new borrowTransaction';
-  }
+  
+   constructor(@InjectRepository(BorrowTransaction) private readonly borrowRep : Repository<BorrowTransaction>,
+               @InjectRepository(Book) private readonly bookRepo: Repository<Book>,
+               @InjectRepository(User) private readonly UserRepo: Repository<User>){}
 
-  findAll() {
-    return `This action returns all borrowTransactions`;
-  }
+    async borrowBook(borrowDto:CreateBorrowTransactionDto){
+       console.log(borrowDto)
+        try{
 
-  findOne(id: number) {
-    return `This action returns a #${id} borrowTransaction`;
-  }
+          const {user_id,book_id,status} = borrowDto
+          //due date
+          const borrowDate = new Date();
+          const dueDate = addDays(borrowDate,14)
+          
+          const book_data = await this.bookRepo.findOne({where:{book_id:book_id}})
+          if (!book_data || book_data.copies_available < 1) {
+            throw new Error('Book is not available for borrowing');
+          }
 
-  update(id: number, updateBorrowTransactionDto: UpdateBorrowTransactionDto) {
-    return `This action updates a #${id} borrowTransaction`;
-  }
 
-  remove(id: number) {
-    return `This action removes a #${id} borrowTransaction`;
+      // Fetch the user details using user_id
+      const user_data = await this.UserRepo.findOne({ where: { user_id } });
+      if (!user_data) {
+          throw new Error('User not found');
+      }
+
+
+        const borrow = await this.borrowRep.create({
+          status: status,
+          due_date:dueDate,
+          books: book_data,          
+          user: user_data,
+        })
+
+
+        await this.borrowRep.save(borrow)
+      
+
+        book_data.copies_available -= 1;
+        await this.bookRepo.save(book_data);
+
+
+          
+        }catch(error)
+        {
+            console.error('error fetching book', error);
+            throw new Error('Could not fetch book');    
+        }
+          
+    }
+
+ 
+    async borrowBookDetails(user_id: number) {
+      const borrowedBooks = await this.borrowRep.createQueryBuilder('borrowTransaction')
+          .innerJoinAndSelect('borrowTransaction.user', 'user') // Join user table
+          .innerJoinAndSelect('borrowTransaction.books', 'book') // Join books table
+          .where('borrowTransaction.return_date IS NOT NULL') // Only books that are not returned
+          .andWhere('borrowTransaction.user_id = :user_id', { user_id }) // Filter by user_id
+          .getMany(); // Get all matching records
+
+      return borrowedBooks;
   }
-}
+  
+    }
+
+
