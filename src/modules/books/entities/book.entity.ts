@@ -36,6 +36,12 @@ export class Book {
   @Column({ name: "total_copies", type: "int" })
   total_copies: number;
 
+//image
+
+  @Column({type:'jsonb', nullable:true})
+  images : string[];
+
+
   // Define the One-to-Many relationship with BorrowTransaction
   @OneToMany(() => BorrowTransaction, (borrowTransaction) => borrowTransaction.books)
   borrowTransactions: BorrowTransaction[];
