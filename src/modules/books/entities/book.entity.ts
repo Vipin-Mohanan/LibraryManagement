@@ -31,16 +31,15 @@ export class Book {
   category: Category;
 
   @Column({ name: "copies_available", type: "int" })
-  copies_available: number; // Fixed the typo and defined the column type
+  copies_available: number; 
 
   @Column({ name: "total_copies", type: "int" })
   total_copies: number;
 
 //image
 
-  // @Column({type:'jsonb', nullable:true})
-  // images : string[];
-
+@Column("bytea", { array: true, nullable: true }) // Store multiple images as binary (bytea)
+images: Buffer[]; 
 
   // Define the One-to-Many relationship with BorrowTransaction
   @OneToMany(() => BorrowTransaction, (borrowTransaction) => borrowTransaction.books)

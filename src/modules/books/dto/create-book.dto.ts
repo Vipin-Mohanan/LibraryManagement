@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 
-import { IsNumber,IsString } from "class-validator";
+import { IsArray, IsNumber,IsOptional,IsString } from "class-validator";
 
 
 export class CreateBookDto {
@@ -30,4 +30,8 @@ export class CreateBookDto {
      @IsNumber()
      total_copies: number;
 
-}
+    @IsArray()
+    images?: Buffer[]; // Accept multiple binary image files
+    
+    }
+

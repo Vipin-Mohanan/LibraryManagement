@@ -1,4 +1,3 @@
-import { ForbiddenException, NotFoundException } from '@nestjs/common';
 /* eslint-disable prettier/prettier */
 import { Injectable, Query } from '@nestjs/common';
 import { CreateBookDto } from './dto/create-book.dto';
@@ -7,8 +6,8 @@ import { Like, Repository } from 'typeorm';
 import { Book } from './entities/book.entity';
 import { Category } from '../categories/entities/category.entity';
 import { UpdateBookDto } from './dto/update-book.dto';
-import { error } from 'console';
-import { title } from 'process';
+import { log } from 'console';
+
 
 @Injectable()
 export class BooksService {
@@ -18,7 +17,7 @@ export class BooksService {
     private readonly categoryRepo: Repository<Category>,
   ) {}
 
-  async addBook(bookDto: CreateBookDto) {
+  async addBook(bookDto: CreateBookDto,images: Buffer[]) {
     console.log(bookDto);
 
     const {category_id} =bookDto; 
@@ -38,12 +37,14 @@ export class BooksService {
       isbn:bookDto.isbn,
       category:category,
       copies_available:bookDto.copies_available,
-      total_copies:bookDto.total_copies
-
+      total_copies:bookDto.total_copies,
+      images:images
     })
 
    // const newBook = this.bookRepo.create({ ...bookData, category });
-
+    console.log(images)
+    console.log("Book Data: ", bookData);
+    
     this.bookRepo.save(bookData)
     return bookData;
   }
