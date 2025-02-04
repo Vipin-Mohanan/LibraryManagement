@@ -6,36 +6,49 @@ import { User } from '../user/entities/user.entity';
 import { Repository } from 'typeorm';
 import { Librarian } from '../librarian/entities/librarian.entity';
 import * as bcrypt from 'bcryptjs';
-import { JwtService } from '@nestjs/jwt';
+import { generateJwtToken } from './jwt.util';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(User) private readonly userrepository: Repository<User>,
-    @InjectRepository(Librarian)
-    private readonly librarianrepository: Repository<Librarian>,
+    @InjectRepository(Librarian) private readonly librarianrepository: Repository<Librarian>,
   ) {}
 
   async login(authDto: CreateAuthDto) {
 
- 
     const { email, password } = authDto;
-    console.log(authDto);
     
-
-  
     const user = await this.userrepository.findOne({ where: { email } });
-    console.log('useeeeeeerrr', user);
 
-    if(!user){
+    const librarian = await this.librarianrepository.findOne({where:{email}});
+    
+    if(!user && !librarian){
       return { message: 'user not exists' };
-
     }
+
+   if(user!=null)
+   {
     if (user && await bcrypt.compare(password, user.password)) {
 
+      const jwtToken = await generateJwtToken(email, password);
       
-      return {message: 'user logged in successfully'};
+      return {
+        message: 'user logged in successfully',
+        token: jwtToken};
     }
+   }
+
+   else{
+    if (librarian && await bcrypt.compare(password, librarian.password)) {
+
+      const jwtToken = await generateJwtToken(email, password);
+      
+      return {
+        message: 'librarian logged in successfully',
+        token: jwtToken};
+    }
+   }
    
     return { message: 'invalid user' };
    

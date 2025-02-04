@@ -1,4 +1,5 @@
 /* eslint-disable prettier/prettier */
+import 'dotenv/config'; // Ensure .env variables are loaded
 import { DataSource } from 'typeorm';
 import { AuditLog } from './modules/audit_log/entities/audit_log.entity';
 import { BorrowTransaction } from './modules/borrow_transactions/entities/borrow_transaction.entity';
@@ -22,13 +23,13 @@ console.log('Initializing DataSource with entities:', [
   AuditLog,
 ]);
 
-export const AppDatSourcer = new DataSource({
+export const AppDataSource = new DataSource({
   type: 'postgres',
-  host: 'localhost',
-  port: 5432,
-  username: 'postgres',
-  password: 'experion@123',
-  database: 'library',
+  host: process.env.DB_HOST,
+  port: Number(process.env.DB_PORT), 
+  username: process.env.DB_USERNAME,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
   entities: [
     User,
     Book,
