@@ -27,6 +27,7 @@ export class UserService {
     console.log(userdto)
     const {name,email,address,password,confirmPassword,phone_number} =userdto
     
+
     if(!userdto){
       throw new ForbiddenException('Access denied');  
     }
@@ -57,6 +58,7 @@ export class UserService {
 
           )
           await this.userRepository.save(newUser)
+          return newUser
 
       }
 

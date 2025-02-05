@@ -8,8 +8,11 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
   
   @Post('/signup')
-  signup(@Body() userdto :CreateUserDto){
-    this.userService.signup(userdto)
+  async signup(@Body() userdto :CreateUserDto){
+
+    console.log("User Data: ", userdto);
+    
+    return await this.userService.signup(userdto)
   }
   
 

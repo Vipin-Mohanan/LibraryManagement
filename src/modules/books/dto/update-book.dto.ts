@@ -1,7 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { PartialType } from '@nestjs/mapped-types';
-import { CreateBookDto } from './create-book.dto';
-import { IsInt, IsNumber, IsOptional, IsString } from 'class-validator';
+import {  IsNumber, IsOptional, IsString } from 'class-validator';
 import { CreateUserDto } from 'src/modules/user/dto/create-user.dto';
 
 
@@ -13,6 +12,11 @@ export class UpdateBookDto extends PartialType(CreateUserDto) {
     @IsOptional()
     @IsString()
     author: string;
+
+    
+    @IsOptional()
+    @IsString()
+    description: string;
   
     @IsOptional()
     @IsString()
