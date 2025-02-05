@@ -12,9 +12,11 @@ export class CreateBookDto {
      @IsString()
      author: string
      
+     @IsString()
+     description:string
     
      @IsString()
-     publisher: string
+     publisher?: string
 
      @IsString()
      publication_year: string ;

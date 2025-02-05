@@ -32,6 +32,7 @@ export class BooksService {
    const bookData =  this.bookRepo.create({
       title:bookDto.title,
       author:bookDto.author,
+      description:bookDto.description,
       publisher:bookDto.publisher,
       publication_year:bookDto.publication_year,
       isbn:bookDto.isbn,
