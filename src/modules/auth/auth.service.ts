@@ -31,9 +31,10 @@ export class AuthService {
    {
     if (user && await bcrypt.compare(password, user.password)) {
 
-      const jwtToken = await generateJwtToken(email, password);
+      const jwtToken = await generateJwtToken(user.email, user.user_id);
       
       return {
+        id:1,
         message: 'user logged in successfully',
         token: jwtToken};
     }
@@ -42,9 +43,10 @@ export class AuthService {
    else{
     if (librarian && await bcrypt.compare(password, librarian.password)) {
 
-      const jwtToken = await generateJwtToken(email, password);
+      const jwtToken = await generateJwtToken(librarian.email, librarian.librarian_id);
       
       return {
+        id:2,
         message: 'librarian logged in successfully',
         token: jwtToken};
     }

@@ -9,8 +9,8 @@ const jwtService = new JwtService({
   signOptions: { expiresIn: process.env.JWT_EXPIRES_IN },
 });
 
-export const generateJwtToken = (email: string, password: string): string => {
-  const payload = { email: email, password: password };
+export const generateJwtToken = (email: string, id: number): string => {
+  const payload = { email: email, id: id };
   
   return jwtService.sign(payload);
 };

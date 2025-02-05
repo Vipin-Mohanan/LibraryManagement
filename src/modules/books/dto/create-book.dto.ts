@@ -1,12 +1,10 @@
 /* eslint-disable prettier/prettier */
 
-import { IsNumber,IsString } from "class-validator";
+import { IsArray, IsNumber, IsString } from "class-validator";
 
 
 export class CreateBookDto {
 
-    @IsNumber()
-     book_id:number;
 
     @IsString()
      title: string;
@@ -21,8 +19,8 @@ export class CreateBookDto {
      @IsString()
      publication_year: string ;
         
-     @IsNumber()
-     isbn: number;
+     @IsString()
+     isbn: string;
     
      @IsNumber()
      category_id :number;
@@ -33,7 +31,8 @@ export class CreateBookDto {
      @IsNumber()
      total_copies: number;
 
+    @IsArray()
+    images?: Buffer[]; // Accept multiple binary image files
+    
+    }
 
-     
-
-}

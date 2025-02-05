@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 
 import { Book } from "src/modules/books/entities/book.entity";
-import { Column, Entity, IntegerType, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity,OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 
 @Entity()
