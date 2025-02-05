@@ -8,13 +8,19 @@ import { User } from './entities/user.entity';
 import { Repository } from 'typeorm/repository/Repository';
 import * as bcrypt from 'bcryptjs';
 import { log } from 'console';
+import { librarianRole } from '../librarian/dto/create-librarian.dto';
+import { Librarian } from '../librarian/entities/librarian.entity';
 @Injectable()
 export class UserService {
 
 
-  constructor(@InjectRepository(User) private readonly userRepository: Repository<User>){
+  constructor(
+  @InjectRepository(User) 
+  private readonly userRepository: Repository<User>,
 
-  }
+  @InjectRepository(Librarian) 
+  private readonly librarianRepository: Repository<Librarian>
+){}
 
 
  async signup(userdto: CreateUserDto) {
@@ -30,7 +36,7 @@ export class UserService {
       throw new ForbiddenException('Password and confirm password must be same');
     }
     else if(password===confirmPassword){ 
-      const existingUser = await this.userRepository.findOne({where:{email}})
+      const existingUser = await this.userRepository.findOne({where:{email}}) || await this.librarianRepository.findOne({where:{email}});
 
       if(existingUser){
           throw new ForbiddenException('user already exists')

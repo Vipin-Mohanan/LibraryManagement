@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 
-import { IsArray, IsNumber,IsOptional,IsString } from "class-validator";
+import { IsArray, IsNumber, IsString } from "class-validator";
 
 
 export class CreateBookDto {
@@ -11,6 +11,7 @@ export class CreateBookDto {
 
      @IsString()
      author: string
+     
     
      @IsString()
      publisher: string
