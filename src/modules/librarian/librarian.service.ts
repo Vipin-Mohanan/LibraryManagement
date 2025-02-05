@@ -1,26 +1,63 @@
-import { Injectable } from '@nestjs/common';
-import { CreateLibrarianDto } from './dto/create-librarian.dto';
-import { UpdateLibrarianDto } from './dto/update-librarian.dto';
+/* eslint-disable prettier/prettier */
+import { ForbiddenException, Injectable } from '@nestjs/common';
+import { CreateLibrarianDto} from './dto/create-librarian.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Librarian } from './entities/librarian.entity';
+import * as bcrypt from 'bcryptjs';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class LibrarianService {
-  create(createLibrarianDto: CreateLibrarianDto) {
-    return 'This action adds a new librarian';
+  constructor(@InjectRepository(Librarian) private readonly librarianRepository: Repository<Librarian>){}
+
+  async registerNewLibrarian(librarianDTO:CreateLibrarianDto)
+  {
+    const {name, email, password, phone_number, address, confirmPassword, role} = librarianDTO;
+
+
+    if(!librarianDTO){
+      throw new ForbiddenException('Access denied');  
+    }
+
+    if(password!= confirmPassword)
+    {
+      throw new ForbiddenException('Incorrect password and confirm Password');
+    }
+
+    else if(password===confirmPassword){
+
+      const existingLibrarian = await this.librarianRepository.findOne({where:{email}});
+
+      if(existingLibrarian)
+      {
+        throw new ForbiddenException('Librarian already exists');
+      }
+
+      else{
+
+        const hashedPassword =await bcrypt.hash(password, 10);
+
+        const newLibrarian = await this.librarianRepository.create(
+         {
+          name,
+          email,
+          password:hashedPassword,
+          phone_number,
+          address,
+          role
+         }
+        )
+
+        await this.librarianRepository.save(newLibrarian);
+
+      }
+
+    }
+
+    
   }
 
-  findAll() {
-    return `This action returns all librarian`;
-  }
 
-  findOne(id: number) {
-    return `This action returns a #${id} librarian`;
-  }
 
-  update(id: number, updateLibrarianDto: UpdateLibrarianDto) {
-    return `This action updates a #${id} librarian`;
-  }
 
-  remove(id: number) {
-    return `This action removes a #${id} librarian`;
-  }
 }

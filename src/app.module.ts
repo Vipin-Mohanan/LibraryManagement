@@ -23,18 +23,27 @@ import { UserModule } from './modules/user/user.module';
 import { DataSource } from 'typeorm';
 import { BorrowTransactionsModule } from './modules/borrow_transactions/borrow_transactions.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
-  imports: [
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: 'experion@123',
-      database: 'library',
-      entities: [User,Book,Publisher,Reservation,Publisher,Fine,AuditLog,Librarian,Category,BorrowTransaction],
-      synchronize: false,
+  imports: [ConfigModule.forRoot({
+    isGlobal: true, // Makes env variables accessible in entire app
+    envFilePath: '.env', // Make sure it points to the right location of the .env file
+
+  }),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        type: 'postgres',
+        host: configService.get<string>('DB_HOST'),
+        port: configService.get<number>('DB_PORT'),
+        username: configService.get<string>('DB_USERNAME'),
+        password: configService.get<string>('DB_PASSWORD'),
+        database: configService.get<string>('DB_NAME'),
+        entities: [User, Book, Publisher, Reservation, Fine, AuditLog, Librarian, Category, BorrowTransaction],
+        synchronize: false, // Ensure this is false in production
+      }),
     }),
     UserModule,BooksModule,PublishersModule,ReservationsModule,FinesModule,AuditLogModule,LibrarianModule,CategoriesModule,BorrowTransactionsModule, AuthModule
   ],

@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Test, TestingModule } from '@nestjs/testing';
 import { BorrowTransactionsController } from './borrow_transactions.controller';
 import { BorrowTransactionsService } from './borrow_transactions.service';
