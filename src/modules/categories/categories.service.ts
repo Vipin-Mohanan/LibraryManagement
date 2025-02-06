@@ -16,12 +16,14 @@ export class CategoriesService {
   async addCategory(categoryDto: CreateCategoryDto) {
     const newCategory = this.categoryRepo.create(categoryDto);
     const savedCategory = await this.categoryRepo.save(newCategory);
-    console.log(`Category saved with ID: ${savedCategory.category_id}`);
-    
+    if(!savedCategory)
+      {
+        throw new Error('Cannot add category')
+      }
     return ({
-      status:"Success",
+      status: "success",
       data:savedCategory
-    })
+      });
   }
 
   async getAllCategory() {
