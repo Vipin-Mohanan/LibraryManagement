@@ -50,9 +50,12 @@ export class BorrowTransactionsService {
       
 
         book_data.copies_available -= 1;
-        await this.bookRepo.save(book_data);
+       const borrowedBook= await this.bookRepo.save(book_data);
 
-
+        return  ({
+          status:"success",
+          data:borrowedBook});
+    
           
         }catch(error)
         {
