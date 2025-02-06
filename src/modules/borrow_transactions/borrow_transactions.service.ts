@@ -65,13 +65,14 @@ export class BorrowTransactionsService {
  
     async borrowBookDetails(user_id: number) {
       const borrowedBooks = await this.borrowRep.createQueryBuilder('borrowTransaction')
-          .innerJoinAndSelect('borrowTransaction.user', 'user') // Join user table
-          .innerJoinAndSelect('borrowTransaction.books', 'books') // Join books table
-          .where('borrowTransaction.return_date IS NOT NULL') // Only books that are not returned
-          .andWhere('borrowTransaction.user_id = :user_id', { user_id }) // Filter by user_id
-          .getMany(); // Get all matching records
-
-      return borrowedBooks;
+          .innerJoinAndSelect('borrowTransaction.user', 'user')
+          .innerJoinAndSelect('borrowTransaction.books', 'books') 
+          .where('borrowTransaction.return_date IS NULL')
+          .andWhere('borrowTransaction.user_id = :user_id', { user_id }) 
+          .getMany(); 
+      return  ({
+        status:"success",
+        data:borrowedBooks});
   }
   
     }
