@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { Category } from './entities/category.entity';
 import { Repository } from 'typeorm';
@@ -17,15 +17,19 @@ export class CategoriesService {
     const newCategory = this.categoryRepo.create(categoryDto);
     const savedCategory = await this.categoryRepo.save(newCategory);
     console.log(`Category saved with ID: ${savedCategory.category_id}`);
-    return savedCategory;
+    
+    return ({
+      status:"Success",
+      data:savedCategory
+    })
   }
 
   async getAllCategory() {
     const getAllCategories = await this.categoryRepo.find();
 
-    if(!getAllCategories)
+    if(getAllCategories.length===0)
     {
-      throw new Error('No categories found')
+      throw new NotFoundException('No categories found')
     }
 
     return ({
