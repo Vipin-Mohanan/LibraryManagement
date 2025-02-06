@@ -85,6 +85,8 @@ export class BooksService {
       .orWhere('category.category_name ILIKE :query', { query: `%${query}%` }) // search by category name
       .getMany();
 
+
+      
     return book;
 
     }catch(error){
@@ -100,7 +102,10 @@ export class BooksService {
        }
         const updatedBook = Object.assign(book,bookdto)
        await this.bookRepo.save(updatedBook)
-       return updatedBook;
+       return ({
+        status: "success",
+        data:updatedBook
+        });
 
     }
     catch(error){
@@ -115,7 +120,12 @@ export class BooksService {
       const books = await this.bookRepo.find({
         where: { category: { category_id:id } }, 
         relations: ['category']  
-      });      return books;
+      });     
+      
+      return ({
+        status: "success",
+        data:books
+        });
     } catch (error) {
       console.error('Error fetching books:', error);
       throw new Error('Could not fetch books');
