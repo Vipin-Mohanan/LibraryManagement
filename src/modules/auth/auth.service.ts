@@ -36,6 +36,7 @@ export class AuthService {
       return {
         id:1,
         message: 'user logged in successfully',
+        user_id:user.user_id,
         token: jwtToken};
     }
    }
@@ -48,6 +49,7 @@ export class AuthService {
       return {
         id:2,
         message: 'librarian logged in successfully',
+        librarian_id:librarian.librarian_id,
         token: jwtToken};
     }
    }

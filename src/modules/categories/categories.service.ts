@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { Category } from './entities/category.entity';
 import { Repository } from 'typeorm';
@@ -29,9 +29,9 @@ export class CategoriesService {
   async getAllCategory() {
     const getAllCategories = await this.categoryRepo.find();
 
-    if(!getAllCategories)
+    if(getAllCategories.length===0)
     {
-      throw new Error('No categories found')
+      throw new NotFoundException('No categories found')
     }
 
     return ({
