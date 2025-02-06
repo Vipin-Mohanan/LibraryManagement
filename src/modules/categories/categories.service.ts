@@ -7,6 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class CategoriesService {
+ 
   constructor(
     @InjectRepository(Category)
     private readonly categoryRepo: Repository<Category>,
@@ -19,5 +20,18 @@ export class CategoriesService {
     return savedCategory;
   }
 
+  async getAllCategory() {
+    const getAllCategories = await this.categoryRepo.find();
+
+    if(!getAllCategories)
+    {
+      throw new Error('No categories found')
+    }
+
+    return ({
+      status:"Success",
+      data:getAllCategories
+    })
+  }
   
 }
