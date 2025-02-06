@@ -91,7 +91,7 @@ export class BooksService {
 
   async editBookDetails(id:number,bookdto:UpdateBookDto){
     try{
-       const book = await this.bookRepo.findOne({where:{book_id:id}})
+       const book = await this.bookRepo.findOne({where:{book_id:id}});
        if(!book){
         throw new Error('book not found')
        }
@@ -103,6 +103,19 @@ export class BooksService {
     catch(error){
       console.error('cannot update book details',error);
       throw new Error('could not update');
+    }
+  }
+
+
+  async getAllBooksByCategory(id:number){
+    try {
+      const books = await this.bookRepo.find({
+        where: { category: { category_id:id } }, 
+        relations: ['category']  
+      });      return books;
+    } catch (error) {
+      console.error('Error fetching books:', error);
+      throw new Error('Could not fetch books');
     }
   }
 }
