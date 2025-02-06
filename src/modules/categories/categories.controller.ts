@@ -12,6 +12,10 @@ export class CategoriesController {
     return await this.categoriesService.addCategory(createCategoryDto);
   }
 
+  @Get('/getAll')
+  async getAllCategory(){
+    return await this.categoriesService.getAllCategory();
+  }
 
   @Get('/viewCategories')
   async viewCategories(){

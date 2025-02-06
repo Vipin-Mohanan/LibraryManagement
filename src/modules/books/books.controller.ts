@@ -9,9 +9,8 @@ import { BooksService } from './books.service';
 import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
-import { diskStorage, memoryStorage } from 'multer';
-import { v4 as uuidv4 } from 'uuid';
-import { Express } from 'express';
+import { memoryStorage } from 'multer';
+
 
 @Controller('books')
 export class BooksController {
@@ -30,7 +29,9 @@ export class BooksController {
     @UploadedFiles() files: { images?: Express.Multer.File[] },
     @Body() createBookDto: CreateBookDto
   ) {
-  
+    
+    console.log("Book DTO", createBookDto);
+    
     const imageBuffer: Buffer[] =files.images.map(file=>file.buffer)
     return await this.booksService.addBook(createBookDto, imageBuffer);
   }
