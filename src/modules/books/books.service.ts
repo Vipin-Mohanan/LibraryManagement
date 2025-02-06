@@ -53,27 +53,34 @@ export class BooksService {
     })
   }
 
-  async getAllBooks(): Promise<Book[]> {
+  async getAllBooks(){
     try {
       const books = await this.bookRepo.find();
-      return books;
+      return ({
+        status:"Success",
+        data:books
+      })
     } catch (error) {
       console.error('Error fetching books:', error);
       throw new Error('Could not fetch books');
     }
   }
 
-  async getBooksById(id: number): Promise<Book> {
+  async getBooksById(id: number){
     try {
       const book = await this.bookRepo.findOne({ where: { book_id: id } });
-      return book;
+
+      return ({
+        status: "success",
+        data:book
+        });
     } catch (error) {
       console.error('error fetching book', error);
       throw new Error('Could not fetch book');
     }
   }
 
-  async searchBook(query :string) : Promise<Book[]>{
+  async searchBook(query :string){
     try{
 
     const book = await this.bookRepo
@@ -85,9 +92,10 @@ export class BooksService {
       .orWhere('category.category_name ILIKE :query', { query: `%${query}%` }) // search by category name
       .getMany();
 
-
-      
-    return book;
+      return ({
+        status: "success",
+        data:book
+        });
 
     }catch(error){
       console.error('error fetching book', error);
