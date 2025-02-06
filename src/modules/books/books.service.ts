@@ -1,12 +1,12 @@
 /* eslint-disable prettier/prettier */
-import { Injectable, Query } from '@nestjs/common';
+import { Injectable} from '@nestjs/common';
 import { CreateBookDto } from './dto/create-book.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Like, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Book } from './entities/book.entity';
 import { Category } from '../categories/entities/category.entity';
 import { UpdateBookDto } from './dto/update-book.dto';
-import { log } from 'console';
+
 
 
 @Injectable()
@@ -47,7 +47,10 @@ export class BooksService {
     console.log("Book Data: ", bookData);
     
     this.bookRepo.save(bookData)
-    return bookData;
+    return ({
+      status:"Success",
+      data:bookData
+    })
   }
 
   async getAllBooks(): Promise<Book[]> {
