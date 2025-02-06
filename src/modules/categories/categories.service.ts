@@ -34,13 +34,4 @@ export class CategoriesService {
     })
   }
   
-  async viewCategores() {
-    const catogories =await this.categoryRepo.find();
-    console.log(catogories);
-    return catogories;
-  }
-
-
-
-  
 }

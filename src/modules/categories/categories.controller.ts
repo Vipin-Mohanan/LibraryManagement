@@ -17,9 +17,5 @@ export class CategoriesController {
     return await this.categoriesService.getAllCategory();
   }
 
-  @Get('/viewCategories')
-  async viewCategories(){
-    return await this.categoriesService.viewCategores();
-  }
   
 }
