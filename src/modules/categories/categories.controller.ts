@@ -9,14 +9,13 @@ export class CategoriesController {
 
   @Post('/addCategory')
   async addCategory(@Body() createCategoryDto: CreateCategoryDto) {
-    return this.categoriesService.addCategory(createCategoryDto);
+    return await this.categoriesService.addCategory(createCategoryDto);
   }
 
   @Get('/getAll')
   async getAllCategory(){
-    return this.categoriesService.getAllCategory();
+    return await this.categoriesService.getAllCategory();
   }
-
 
   
 }
