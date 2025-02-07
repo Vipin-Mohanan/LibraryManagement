@@ -36,11 +36,12 @@ export class BorrowTransaction {
          @CreateDateColumn({ type: 'timestamp' })  // Auto inserts current timestamp
          due_date: Date;
       
-         @CreateDateColumn({ type: 'timestamp' })  // Auto inserts current timestamp
-         return_date: Date;
-    
+      
+        @Column({ type: 'timestamp', nullable: true, default: null }) // No automatic timestamp
+        return_date: Date | null;
+
        
-    
+
         @Column()
         status:string
     
