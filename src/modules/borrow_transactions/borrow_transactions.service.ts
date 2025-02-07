@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BorrowTransaction } from './entities/borrow_transaction.entity';
 import { Repository } from 'typeorm';
@@ -106,4 +106,49 @@ export class BorrowTransactionsService {
       data: borrowedBooks,
     };
   }
-}
+
+  async updateReturnedBook(user_id, book_id)
+  {
+    const borrowLog = await this.borrowRep.find({
+      where: { 
+        user: user_id, 
+        books: book_id 
+      }
+    });
+
+    if(!borrowLog)
+    {
+      throw new ForbiddenException('no borrow logs for this user');
+    }
+
+    const updatedData = await this.borrowRep.update(
+      {
+        user:user_id
+      },
+      {
+        status:'returned',
+        return_date:new Date()
+      }
+
+    )
+
+    return({
+      status:"Success",
+      data:updatedData
+    })
+      
+  
+  
+  
+  
+  }
+
+
+
+
+
+    }
+
+
+
+
