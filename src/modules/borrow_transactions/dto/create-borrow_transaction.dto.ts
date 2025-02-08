@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { IsDate, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsNumber, IsOptional, IsString } from 'class-validator';
 /* eslint-disable prettier/prettier */
 export class CreateBorrowTransactionDto {
 
