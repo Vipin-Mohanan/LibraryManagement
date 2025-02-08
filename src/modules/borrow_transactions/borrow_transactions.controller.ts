@@ -3,7 +3,7 @@ import { Controller, Get, Post, Body, Patch, Param, Query } from '@nestjs/common
 import { BorrowTransactionsService } from './borrow_transactions.service';
 import { CreateBorrowTransactionDto } from './dto/create-borrow_transaction.dto';
 
-@Controller('books')
+@Controller('borrow')
 export class BorrowTransactionsController {
   constructor(private readonly borrowTransactionsService: BorrowTransactionsService) {}
   
