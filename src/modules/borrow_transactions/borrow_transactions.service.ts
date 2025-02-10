@@ -111,9 +111,10 @@ export class BorrowTransactionsService {
   {
     const borrowLog = await this.borrowRep.find({
       where: { 
-        user: user_id, 
-        books: book_id 
-      }
+        user: {user_id:user_id}, 
+        books: {book_id:book_id}
+      },
+      relations:['user','books']
     });
 
     if(!borrowLog)
