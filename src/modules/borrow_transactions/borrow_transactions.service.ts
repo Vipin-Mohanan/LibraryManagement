@@ -109,12 +109,14 @@ export class BorrowTransactionsService {
 
   async updateReturnedBook(user_id, book_id)
   {
-    const borrowLog = await this.borrowRep.find({
+    const borrowLog = await this.borrowRep.findOne({
       where: { 
         user: {user_id:user_id}, 
-        books: {book_id:book_id}
+        books: {book_id:book_id} 
       },
-      relations:['user','books']
+      relations:[
+        'user', 'books'
+      ]
     });
 
     if(!borrowLog)
@@ -124,7 +126,8 @@ export class BorrowTransactionsService {
 
     const updatedData = await this.borrowRep.update(
       {
-        user:user_id
+        user:user_id,
+        books:book_id
       },
       {
         status:'returned',
