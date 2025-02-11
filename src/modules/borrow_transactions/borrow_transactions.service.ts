@@ -140,16 +140,8 @@ export class BorrowTransactionsService {
       status:"Success",
       data:updatedData
     })
-      
-  
-  
-  
   
   }
-
-
-
-
 
     }
 

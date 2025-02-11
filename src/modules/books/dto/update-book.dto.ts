@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { PartialType } from '@nestjs/mapped-types';
-import {  IsNumber, IsOptional, IsString } from 'class-validator';
+import {  IsArray, IsNumber, IsOptional, IsString } from 'class-validator';
 import { CreateUserDto } from 'src/modules/user/dto/create-user.dto';
 
 
@@ -42,6 +42,8 @@ export class UpdateBookDto extends PartialType(CreateUserDto) {
     @IsNumber()
     total_copies: number;
 
-
+    @IsOptional()
+    @IsArray()
+    images?: Buffer[]; // Accept multiple binary image files
 
 }

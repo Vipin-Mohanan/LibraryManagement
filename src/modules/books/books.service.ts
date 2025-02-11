@@ -6,6 +6,8 @@ import { Repository } from 'typeorm';
 import { Book } from './entities/book.entity';
 import { Category } from '../categories/entities/category.entity';
 import { UpdateBookDto } from './dto/update-book.dto';
+import * as fs from 'fs';
+
 
 
 
@@ -68,7 +70,7 @@ export class BooksService {
 
   async getBooksById(id: number){
     try {
-      const book = await this.bookRepo.findOne({ where: { book_id: id } });
+      const book = await this.bookRepo.findOne({ where: { book_id: id }, relations:['category'] });
 
       return ({
         status: "success",
@@ -102,25 +104,39 @@ export class BooksService {
       throw new Error('Could not fetch book');    }
   }
 
-  async editBookDetails(id:number,bookdto:UpdateBookDto){
-    try{
-       const book = await this.bookRepo.findOne({where:{book_id:id}});
-       if(!book){
-        throw new Error('book not found')
-       }
-        const updatedBook = Object.assign(book,bookdto)
-       await this.bookRepo.save(updatedBook)
-       return ({
-        status: "success",
-        data:updatedBook
-        });
+  async editBookDetails(id: number, bookDto: UpdateBookDto, images: Express.Multer.File[]) {
+    try {
+        const book = await this.bookRepo.findOne({ where: { book_id: id } });        
 
+        if (!book) {
+            throw new Error('Book not found');
+        }
+
+      if (images && images.length > 0) {
+        book.images = await Promise.all(images.map(async (file) => {
+            // Read the file as a buffer
+            const fileBuffer = fs.readFileSync(file.path); // Read the image file as a buffer
+            return fileBuffer;
+        }));
+        }
+
+        console.log("Book Images: ",book.images);
+        
+
+        // ✅ Update book details
+        const updatedBook = Object.assign(book, bookDto);
+        await this.bookRepo.save(updatedBook);
+
+        return {
+            status: "success",
+            data: updatedBook
+        };
+    } catch (error) {
+        console.error('Cannot update book details', error);
+        throw new Error('Could not update');
     }
-    catch(error){
-      console.error('cannot update book details',error);
-      throw new Error('could not update');
-    }
-  }
+}
+
 
 
   async getAllBooksByCategory(id:number){
