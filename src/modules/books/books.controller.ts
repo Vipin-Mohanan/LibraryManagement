@@ -8,7 +8,7 @@ import {
 import { BooksService } from './books.service';
 import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
-import { FileFieldsInterceptor } from '@nestjs/platform-express';
+import { FileFieldsInterceptor, FileInterceptor } from '@nestjs/platform-express';
 import { memoryStorage } from 'multer';
 
 
@@ -57,10 +57,12 @@ export class BooksController {
   }
 
   @Patch('/editBookDetails/:id')
+  @UseInterceptors(FileInterceptor('images')) 
   async editBookDetails(
     @Param('id', ParseIntPipe) id: number,
-    @Body() bookDto: UpdateBookDto
+    @Body() bookDto: UpdateBookDto, // Will contain text fields
+    @UploadedFiles() images: Express.Multer.File[] 
   ) {
-    return await this.booksService.editBookDetails(id, bookDto);
+    return await this.booksService.editBookDetails(id, bookDto, images);
   }
 }
