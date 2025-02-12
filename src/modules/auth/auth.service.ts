@@ -31,7 +31,8 @@ export class AuthService {
    {
     if (user && await bcrypt.compare(password, user.password)) {
 
-      const jwtToken = await generateJwtToken(user.email, user.user_id);
+      const role:string = 'user'
+      const jwtToken = await generateJwtToken(user.email, user.user_id, role);
       
       return {
         id:1,
@@ -44,7 +45,7 @@ export class AuthService {
    else{
     if (librarian && await bcrypt.compare(password, librarian.password)) {
 
-      const jwtToken = await generateJwtToken(librarian.email, librarian.librarian_id);
+      const jwtToken = await generateJwtToken(librarian.email, librarian.librarian_id, librarian.role);
       
       return {
         id:2,
