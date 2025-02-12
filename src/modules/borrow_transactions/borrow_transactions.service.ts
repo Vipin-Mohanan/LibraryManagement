@@ -38,14 +38,7 @@ export class BorrowTransactionsService {
         throw new Error('User not found');
       }
 
-      // const alreadyBorrowed = await this.borrowRep.find({
-      //   where: {
-      //     books: { book_id: book_id },
-      //     return_date: null,
-      //   },
-      //   relations: ['books'],
-      // });
-
+  
 
       const alreadyBorrowed = await this.borrowRep.createQueryBuilder('borrowTransaction')
       .innerJoin('borrowTransaction.books', 'books')

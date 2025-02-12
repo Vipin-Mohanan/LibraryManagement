@@ -5,10 +5,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Librarian } from './entities/librarian.entity';
 import * as bcrypt from 'bcryptjs';
 import { Repository } from 'typeorm';
+import { User } from '../user/entities/user.entity';
 
 @Injectable()
 export class LibrarianService {
-  constructor(@InjectRepository(Librarian) private readonly librarianRepository: Repository<Librarian>){}
+  constructor(@InjectRepository(Librarian) private readonly librarianRepository: Repository<Librarian>, 
+              @InjectRepository(User) private readonly userRepository:Repository<User>){}
 
   async registerNewLibrarian(librarianDTO:CreateLibrarianDto)
   {
@@ -26,7 +28,7 @@ export class LibrarianService {
 
     else if(password===confirmPassword){
 
-      const existingLibrarian = await this.librarianRepository.findOne({where:{email}});
+      const existingLibrarian = await this.librarianRepository.findOne({where:{email}}) || await this.userRepository.findOne({where:{email}})  ;
 
       if(existingLibrarian)
       {
