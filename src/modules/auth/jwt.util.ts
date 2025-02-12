@@ -9,16 +9,19 @@ const jwtService = new JwtService({
   signOptions: { expiresIn: process.env.JWT_EXPIRES_IN },
 });
 
-export const generateJwtToken = (email: string, id: number): string => {
-  const payload = { email: email, id: id };
-  
+export const generateJwtToken = (email: string, id: number, role:string): string => {
+  const payload = { email: email, id: id, role: role };
+   
   return jwtService.sign(payload);
 };
 
 export const verifyJwtToken = (token: string): any => {
   try {
-    return jwtService.verify(token);
+    return jwtService.verify(token, {
+      secret: process.env.JWT_SECRET_KEY
+    });
   } catch (error) {
-    return null; // Return null if verification fails
+    console.error('JWT verification failed:', error);
+    return null;  // Return null if verification fails
   }
 };
