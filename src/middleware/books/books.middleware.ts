@@ -34,6 +34,7 @@ export class BooksMiddleware implements NestMiddleware {
       '/getBooksById/',
       '/getBooksByCategoryId/',
     ];
+    
     if (
       decoded.role === 'librarian' &&
       adminRoutes.some((path) => req.url.includes(path))
