@@ -41,6 +41,13 @@ export class BooksController {
     return await this.booksService.getAllBooks();
   }
 
+
+  @Get('/getAllBooksCategorywise')
+  async getAllBooksCategorywise(){
+    return await this.booksService.getAllBooksCategorywise();
+  }
+
+
   @Get('/getBooksById/:id')
   async getBookById(@Param('id', ParseIntPipe) id: number) {
     return await this.booksService.getBooksById(id);

@@ -11,6 +11,7 @@ export class BorrowTransactionsController {
   async borrowBook(@Body() borrowdto:CreateBorrowTransactionDto){
     return await this.borrowTransactionsService.borrowBook(borrowdto)
   }
+
   
   @Get('/viewBorrowBooks/:id')
   async borrowBookDetails(@Param('id') id :number){
@@ -19,7 +20,8 @@ export class BorrowTransactionsController {
 
   @Patch('/return')
   async updateReturnedBook(@Query('user_id')user_id:number, @Query('book_id')book_id:number)
-  {
+  { 
+    
     return await this.borrowTransactionsService.updateReturnedBook(user_id, book_id)
   }
   
