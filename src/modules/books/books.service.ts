@@ -155,4 +155,37 @@ export class BooksService {
       throw new Error('Could not fetch books');
     }
   }
+
+  async getAllBooksCategorywise(){
+    try{
+        const books = await this.bookRepo
+        .createQueryBuilder('book')
+        .leftJoinAndSelect('book.category', 'category')
+        .orderBy('category.category_name', 'ASC')
+        .getMany();
+
+      
+        const categorizedBooks = books.reduce((acc,book)=>{
+          const categoryName = book.category.category_name;
+
+          if(!acc[categoryName]){
+            acc[categoryName]=[];
+          }
+          acc[categoryName].push(book);
+          return acc;
+        })
+      console.log(categorizedBooks);
+
+     return{
+       status:"success",
+       data:categorizedBooks
+     } ;
+
+    }catch(error){
+      console.log('Error fetching books categorywise',error);
+      throw new Error('Could not fetch books')
+      
+
+    }
+  }
 }
