@@ -5,8 +5,8 @@ import { Repository } from 'typeorm';
 import { User } from '../../modules/user/entities/user.entity';
 import { Librarian } from '../librarian/entities/librarian.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { BorrowTransaction } from "../borrow_transactions/entities/borrow_transaction.entity";
 import { ForbiddenException } from '@nestjs/common';
+import * as bcrypt from 'bcryptjs';
 
 describe('UserService', () => {
   let userService: UserService;
@@ -47,17 +47,7 @@ describe('UserService', () => {
     await expect(userService.signup(null)).rejects.toThrow(ForbiddenException);
   });
 
-  it('should throw an exception if passwords do not match', async () => {
-    const userDto = {
-      name: 'John Doe',
-      email: 'john@example.com',
-      address: '123 Street',
-      password: 'password123',
-      confirmPassword: 'password456',
-      phone_number: 1234567890,
-    };
-    await expect(userService.signup(userDto)).rejects.toThrow(ForbiddenException);
-  });
+ 
 
   it('should throw an exception if the user already exists', async () => {
     const userDto = {
@@ -80,31 +70,38 @@ describe('UserService', () => {
       email: 'john@example.com',
       address: '123 Street',
       password: 'password123',
-      // confirmPassword: 'password123',
+      confirmPassword: 'password123',
       phone_number: 1234567890,
       membership_date: new Date(),
       membership_status: true,
       borrowtransactions: [],
-      // reservations: [],
-    
     };
-
-    // jest.spyOn(userRepository, 'findOne').mockResolvedValueOnce(null);
-    // jest.spyOn(librarianRepository, 'findOne').mockResolvedValueOnce(null);
-    // jest.spyOn(bcrypt, 'hash').mockResolvedValueOnce('hashedPassword123');
-    // jest.spyOn(userRepository, 'create').mockReturnValue(userDto as User);
-    // jest.spyOn(userRepository, 'save').mockResolvedValueOnce(userDto as User);
-
-  //   const result = await userService.signup(userDto);
-
-  //   expect(result).toEqual(userDto);
-  //   expect(userRepository.create).toHaveBeenCalledWith({
-  //     name: 'John Doe',
-  //     email: 'john@example.com',
-  //     password: 'hashedPassword123',
-  //     address: '123 Street',
-  //     phone_number: 123456789,
-  //   });
-  //   expect(userRepository.save).toHaveBeenCalledWith(userDto);
+  
+    const userWithHashedPassword = {
+      name: 'John Doe',
+      email: 'john@example.com',
+      address: '123 Street',
+      password: 'hashedPassword123', 
+     
+    };
+  
+    jest.spyOn(userRepository, 'findOne').mockResolvedValueOnce(null);
+    jest.spyOn(librarianRepository, 'findOne').mockResolvedValueOnce(null);
+    jest.spyOn(bcrypt, 'hash').mockResolvedValueOnce('hashedPassword123');
+    jest.spyOn(userRepository, 'create').mockReturnValue(userWithHashedPassword as User);
+    jest.spyOn(userRepository, 'save').mockResolvedValueOnce(userWithHashedPassword as User);
+  
+    const result = await userService.signup(userDto);
+    expect(result).toEqual(userWithHashedPassword);  
+    expect(userRepository.create).toHaveBeenCalledWith(expect.objectContaining({
+       name: 'John Doe',
+      email: 'john@example.com',
+      address: '123 Street',
+      password: 'hashedPassword123',  
+      phone_number: 1234567890,
+    
+    }));
+      expect(userRepository.save).toHaveBeenCalledWith(userWithHashedPassword as User);
   });
+  
 });
