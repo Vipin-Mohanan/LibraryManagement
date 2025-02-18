@@ -10,7 +10,7 @@ export class BorrowTransactionsMiddleware implements NestMiddleware {
     const token = req.headers['authorization'].split(' ')[1];
     const decoded =verifyJwtToken(token)
 
-    console.log("decoded token",decoded);
+    console.log("Decoded token",decoded);
     
     if(!decoded){
       throw new UnauthorizedException('Invalid token')
