@@ -24,9 +24,15 @@ export class UserService {
 
 
  async signup(userdto: CreateUserDto) {
-    console.log(userdto)
+
+   if(!userdto){
+    throw new ForbiddenException('User dto is empty')
+   }
     const {name,email,address,password,confirmPassword,phone_number} =userdto
    
+   if(password!=confirmPassword){
+    throw new ForbiddenException('Password and confirm password does not match')
+   }
  
       const existingUser = await this.userRepository.findOne({where:{email}}) || await this.librarianRepository.findOne({where:{email}});
 
