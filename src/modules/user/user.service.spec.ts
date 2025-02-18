@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 import { User } from '../../modules/user/entities/user.entity';
 import { Librarian } from '../librarian/entities/librarian.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { BorrowTransaction } from "../../borrow_transactions/entities/borrow_transaction.entity";
+import { BorrowTransaction } from "../borrow_transactions/entities/borrow_transaction.entity";
 import { ForbiddenException } from '@nestjs/common';
 
 describe('UserService', () => {
@@ -35,8 +35,8 @@ describe('UserService', () => {
     }).compile();
 
     userService = module.get<UserService>(UserService);
-    // userRepository = module.get<Repository<User>>(getRepositoryToken(User));
-    // librarianRepository = module.get<Repository<Librarian>>(getRepositoryToken(Librarian));
+    userRepository = module.get<Repository<User>>(getRepositoryToken(User));
+    librarianRepository = module.get<Repository<Librarian>>(getRepositoryToken(Librarian));
   });
 
   it('should be defined', () => {
@@ -47,48 +47,53 @@ describe('UserService', () => {
     await expect(userService.signup(null)).rejects.toThrow(ForbiddenException);
   });
 
-  // it('should throw an exception if passwords do not match', async () => {
-  //   const userDto = {
-  //     name: 'John Doe',
-  //     email: 'john@example.com',
-  //     address: '123 Street',
-  //     password: 'password123',
-  //     confirmPassword: 'password456',
-  //     phone_number: 1234567890,
-  //   };
-  //   await expect(userService.signup(userDto)).rejects.toThrow(ForbiddenException);
-  // });
+  it('should throw an exception if passwords do not match', async () => {
+    const userDto = {
+      name: 'John Doe',
+      email: 'john@example.com',
+      address: '123 Street',
+      password: 'password123',
+      confirmPassword: 'password456',
+      phone_number: 1234567890,
+    };
+    await expect(userService.signup(userDto)).rejects.toThrow(ForbiddenException);
+  });
 
-  // it('should throw an exception if the user already exists', async () => {
-  //   const userDto = {
-  //     name: 'John Doe',
-  //     email: 'john@example.com',
-  //     address: '123 Street',
-  //     password: 'password123',
-  //     confirmPassword: 'password123',
-  //     phone_number: 1234567890,
-  //   };
+  it('should throw an exception if the user already exists', async () => {
+    const userDto = {
+      name: 'John Doe',
+      email: 'john@example.com',
+      address: '123 Street',
+      password: 'password123',
+      confirmPassword: 'password123',
+      phone_number: 1234567890,
+    };
 
-  //   jest.spyOn(userRepository, 'findOne').mockResolvedValueOnce({ email: 'john@example.com' } as User);
+    jest.spyOn(userRepository, 'findOne').mockResolvedValueOnce({ email: 'john@example.com' } as User);
 
-  //   await expect(userService.signup(userDto)).rejects.toThrow(ForbiddenException);
-  // });
+    await expect(userService.signup(userDto)).rejects.toThrow(ForbiddenException);
+  });
 
-  // it('should hash the password and create a new user', async () => {
-  //   const userDto = {
-  //     name: 'John Doe',
-  //     email: 'john@example.com',
-  //     address: '123 Street',
-  //     password: 'password123',
-  //     confirmPassword: 'password123',
-  //     phone_number: 1234567890,
-  //   };
+  it('should hash the password and create a new user', async () => {
+    const userDto = {
+      name: 'John Doe',
+      email: 'john@example.com',
+      address: '123 Street',
+      password: 'password123',
+      // confirmPassword: 'password123',
+      phone_number: 1234567890,
+      membership_date: new Date(),
+      membership_status: true,
+      borrowtransactions: [],
+      // reservations: [],
+    
+    };
 
-  //   jest.spyOn(userRepository, 'findOne').mockResolvedValueOnce(null);
-  //   jest.spyOn(librarianRepository, 'findOne').mockResolvedValueOnce(null);
-  //   jest.spyOn(bcrypt, 'hash').mockResolvedValueOnce('hashedPassword123');
-  //   // jest.spyOn(userRepository, 'create').mockReturnValue(userDto as User);
-  //   // jest.spyOn(userRepository, 'save').mockResolvedValueOnce(userDto as User);
+    // jest.spyOn(userRepository, 'findOne').mockResolvedValueOnce(null);
+    // jest.spyOn(librarianRepository, 'findOne').mockResolvedValueOnce(null);
+    // jest.spyOn(bcrypt, 'hash').mockResolvedValueOnce('hashedPassword123');
+    // jest.spyOn(userRepository, 'create').mockReturnValue(userDto as User);
+    // jest.spyOn(userRepository, 'save').mockResolvedValueOnce(userDto as User);
 
   //   const result = await userService.signup(userDto);
 
@@ -101,5 +106,5 @@ describe('UserService', () => {
   //     phone_number: 123456789,
   //   });
   //   expect(userRepository.save).toHaveBeenCalledWith(userDto);
-  // });
+  });
 });
