@@ -23,7 +23,7 @@ export class Book {
   publisher: string;
 
   @Column()
-  publication_year: string;
+  publication_year: number;
 
   @Column()
   isbn: string; // Changed to string for better compatibility with ISBN formats
