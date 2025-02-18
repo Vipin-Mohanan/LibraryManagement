@@ -26,16 +26,8 @@ export class UserService {
  async signup(userdto: CreateUserDto) {
     console.log(userdto)
     const {name,email,address,password,confirmPassword,phone_number} =userdto
-    
-
-    if(!userdto){
-      throw new ForbiddenException('Access denied');  
-    }
-
-    else if(password!=confirmPassword){
-      throw new ForbiddenException('Password and confirm password must be same');
-    }
-    else if(password===confirmPassword){ 
+   
+ 
       const existingUser = await this.userRepository.findOne({where:{email}}) || await this.librarianRepository.findOne({where:{email}});
 
       if(existingUser){
@@ -59,8 +51,6 @@ export class UserService {
           )
           await this.userRepository.save(newUser)
           return newUser
-
-      }
 
 
 

@@ -1,0 +1,39 @@
+/* eslint-disable prettier/prettier */
+import { BadRequestException, ForbiddenException, Injectable, MethodNotAllowedException, NestMiddleware } from '@nestjs/common';
+
+@Injectable()
+export class LibrarianMiddleware implements NestMiddleware {
+  use(req: any, res: any, next: () => void) {
+   
+    if(req.method==='POST' && req.url.includes('/signup'))
+    {
+      const {name, email, password, phone_number, address, confirmPassword, role} = req.body;
+
+      
+         if(!name || !email || !address || !phone_number || !password || !confirmPassword || !role)
+           {
+              throw new BadRequestException('Please fill in all fields');
+           }
+      
+          if (!/^\d{10,}$/.test(phone_number)) 
+            {
+                throw new BadRequestException('Invalid phone number');
+            }
+      
+          if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) 
+          {
+               throw new BadRequestException('Invalid email format');
+          }
+
+          if(password!= confirmPassword)
+            {
+              throw new ForbiddenException('Incorrect password and confirm Password');
+            }
+            next();
+    }
+
+     else{
+          throw new MethodNotAllowedException('Invalid method or url')
+        }
+  }
+}

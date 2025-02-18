@@ -14,46 +14,38 @@ export class LibrarianService {
 
   async registerNewLibrarian(librarianDTO:CreateLibrarianDto)
   {
-    const {name, email, password, phone_number, address, confirmPassword, role} = librarianDTO;
+    try {
+      const {name, email, password, phone_number, address, role} = librarianDTO;
 
+        const existingLibrarian = await this.librarianRepository.findOne({where:{email}}) || await this.userRepository.findOne({where:{email}})  ;
 
-    if(!librarianDTO){
-      throw new ForbiddenException('Access denied');  
-    }
+        if(existingLibrarian)
+        {
+          throw new ForbiddenException('Librarian already exists');
+        }
 
-    if(password!= confirmPassword)
-    {
-      throw new ForbiddenException('Incorrect password and confirm Password');
-    }
+        else{
 
-    else if(password===confirmPassword){
+          const hashedPassword =await bcrypt.hash(password, 10);
 
-      const existingLibrarian = await this.librarianRepository.findOne({where:{email}}) || await this.userRepository.findOne({where:{email}})  ;
+          const newLibrarian = await this.librarianRepository.create(
+          {
+            name,
+            email,
+            password:hashedPassword,
+            phone_number,
+            address,
+            role
+          }
+          )
 
-      if(existingLibrarian)
-      {
-        throw new ForbiddenException('Librarian already exists');
-      }
+          await this.librarianRepository.save(newLibrarian);
 
-      else{
+        }
 
-        const hashedPassword =await bcrypt.hash(password, 10);
-
-        const newLibrarian = await this.librarianRepository.create(
-         {
-          name,
-          email,
-          password:hashedPassword,
-          phone_number,
-          address,
-          role
-         }
-        )
-
-        await this.librarianRepository.save(newLibrarian);
-
-      }
-
+      
+    } catch (error) {
+      throw error
     }
 
     

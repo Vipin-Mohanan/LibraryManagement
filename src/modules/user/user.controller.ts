@@ -1,20 +1,18 @@
 /* eslint-disable prettier/prettier */
-import { Controller, Post, Body, } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
+import { UserAuthGuard } from 'src/guard/user-auth/user-auth.guard';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
   
   @Post('/signup')
+  @UseGuards(UserAuthGuard)
   async signup(@Body() userdto :CreateUserDto){
-
-    console.log("User Data: ", userdto);
     
     return await this.userService.signup(userdto)
   }
   
-
-
 }
