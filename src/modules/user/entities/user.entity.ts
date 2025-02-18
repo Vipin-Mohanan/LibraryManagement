@@ -21,7 +21,7 @@ export class User {
         @Column()
         @IsEmpty()
         password:string
-    
+
         @Column()
         @IsEmpty()
         phone_number:number
