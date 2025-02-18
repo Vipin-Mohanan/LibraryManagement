@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { BadRequestException, Injectable, MethodNotAllowedException, NestMiddleware } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, MethodNotAllowedException, NestMiddleware } from '@nestjs/common';
 
 @Injectable()
 export class UserMiddleware implements NestMiddleware {
@@ -22,6 +22,11 @@ export class UserMiddleware implements NestMiddleware {
           if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
             throw new BadRequestException('Invalid email format');
           }
+
+          if(password!= confirmPassword)
+            {
+               throw new ForbiddenException('Incorrect password and confirm Password');
+            }
           next();
     }
     else{
