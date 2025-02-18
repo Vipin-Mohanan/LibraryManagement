@@ -1,6 +1,8 @@
 /* eslint-disable prettier/prettier */
-import { Book } from 'src/modules/books/entities/book.entity';
-import { User } from 'src/modules/user/entities/user.entity';
+// import { Book } from 'src/modules/books/entities/book.entity';
+import { User } from '../../user/entities/user.entity';
+import { Book } from '../../books/entities/book.entity';
+
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()

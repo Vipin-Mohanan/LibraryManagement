@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import { CreateAuditLogDto } from './dto/create-audit_log.dto';
 import { UpdateAuditLogDto } from './dto/update-audit_log.dto';

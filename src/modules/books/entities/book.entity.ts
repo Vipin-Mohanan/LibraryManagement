@@ -1,8 +1,9 @@
 /* eslint-disable prettier/prettier */
+import { BorrowTransaction } from "../../borrow_transactions/entities/borrow_transaction.entity";
 
-import { BorrowTransaction } from "src/modules/borrow_transactions/entities/borrow_transaction.entity";
-import { Category } from "src/modules/categories/entities/category.entity";
-import { Reservation } from 'src/modules/reservations/entities/reservation.entity';
+// import { BorrowTransaction } from "src/modules/borrow_transactions/entities/borrow_transaction.entity";
+import { Category } from "../../categories/entities/category.entity";
+import { Reservation } from '../../reservations/entities/reservation.entity';
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()

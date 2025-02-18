@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable prettier/prettier */
 import { IsEmpty } from "class-validator";
-import { BorrowTransaction } from 'src/modules/borrow_transactions/entities/borrow_transaction.entity';
+import { BorrowTransaction } from '..//../borrow_transactions/entities/borrow_transaction.entity';
 import { Column, Entity, IntegerType, JoinColumn,  OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()

@@ -10,6 +10,7 @@ import * as bcrypt from 'bcryptjs';
 import { log } from 'console';
 import { librarianRole } from '../librarian/dto/create-librarian.dto';
 import { Librarian } from '../librarian/entities/librarian.entity';
+
 @Injectable()
 export class UserService {
 
@@ -24,9 +25,15 @@ export class UserService {
 
 
  async signup(userdto: CreateUserDto) {
-    console.log(userdto)
+
+   if(!userdto){
+    throw new ForbiddenException('User dto is empty')
+   }
     const {name,email,address,password,confirmPassword,phone_number} =userdto
    
+   if(password!=confirmPassword){
+    throw new ForbiddenException('Password and confirm password does not match')
+   }
  
       const existingUser = await this.userRepository.findOne({where:{email}}) || await this.librarianRepository.findOne({where:{email}});
 
@@ -56,13 +63,6 @@ export class UserService {
 
     }
    
-
-
-
-
-
-
-
   }
  
 }

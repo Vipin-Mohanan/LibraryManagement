@@ -5,7 +5,7 @@ import { Column, PrimaryGeneratedColumn } from 'typeorm';
 export class CreateCategoryDto {
 
     @PrimaryGeneratedColumn()
-    category_id : number;
+    category_id ?: number;
 
     @Column()
     category_name: string;

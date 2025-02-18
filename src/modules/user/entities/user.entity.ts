@@ -1,8 +1,8 @@
 /* eslint-disable prettier/prettier */
 import { IsEmpty } from "class-validator";
-import { BorrowTransaction } from "src/modules/borrow_transactions/entities/borrow_transaction.entity";
+import { BorrowTransaction } from "../../borrow_transactions/entities/borrow_transaction.entity";
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { Reservation } from 'src/modules/reservations/entities/reservation.entity';
+import { Reservation } from '../../reservations/entities/reservation.entity';
 
 
 @Entity()
