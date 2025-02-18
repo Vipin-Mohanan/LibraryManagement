@@ -165,20 +165,24 @@ export class BooksService {
         .getMany();
 
       
-        const categorizedBooks = books.reduce((acc,book)=>{
+        const categorizedBooks = books.reduce((acc, book) => {
           const categoryName = book.category.category_name;
-
-          if(!acc[categoryName]){
-            acc[categoryName]=[];
+        
+          if (!acc[categoryName]) {
+            acc[categoryName] = [];
           }
           acc[categoryName].push(book);
-          return acc;
-        })
-      console.log(categorizedBooks);
-
+        
+          return acc; // ✅ Ensure the accumulator is returned
+        }, {}); // ✅ Initialize `reduce` with an empty object
+        
+        const categorizedBooksArray = Object.entries(categorizedBooks).map(([category, books]) => ({
+          category,
+          books,
+        }));
      return{
        status:"success",
-       data:categorizedBooks
+       data:categorizedBooksArray
      } ;
 
     }catch(error){

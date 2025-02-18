@@ -6,6 +6,7 @@ import { User } from '../../modules/user/entities/user.entity';
 import { Librarian } from '../librarian/entities/librarian.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { BorrowTransaction } from "../../borrow_transactions/entities/borrow_transaction.entity";
+import { ForbiddenException } from '@nestjs/common';
 
 describe('UserService', () => {
   let userService: UserService;
@@ -42,9 +43,9 @@ describe('UserService', () => {
     expect(userService).toBeDefined();
   });
 
-  // it('should throw an exception if userdto is empty', async () => {
-  //   await expect(userService.signup(null)).rejects.toThrow(ForbiddenException);
-  // });
+  it('should throw an exception if userdto is empty', async () => {
+    await expect(userService.signup(null)).rejects.toThrow(ForbiddenException);
+  });
 
   // it('should throw an exception if passwords do not match', async () => {
   //   const userDto = {
