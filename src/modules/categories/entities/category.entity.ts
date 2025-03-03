@@ -17,7 +17,7 @@ export class Category {
 
      // Define the One-to-Many relationship with Book
      @OneToMany(() => Book, (book) => book.category)
-     books: Book[];
+     books?: Book[];
 
      
 }

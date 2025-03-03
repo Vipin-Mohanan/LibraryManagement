@@ -1,9 +1,9 @@
 /* eslint-disable prettier/prettier */
+
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
-
 
 describe('UserController', () => {
   let userController: UserController;
@@ -16,7 +16,11 @@ describe('UserController', () => {
         {
           provide: UserService,
           useValue: {
-            signup: jest.fn().mockResolvedValue({ id: 1, name: 'Test User', email: 'test@example.com' }),
+            signup: jest.fn().mockResolvedValue({
+              id: 1,
+              name: 'Test User',
+              email: 'test@example.com',
+            }),
           },
         },
       ],
@@ -31,18 +35,30 @@ describe('UserController', () => {
   });
 
   describe('signup', () => {
-    it('should call UserService.signup and return the result', async () => {
-      const dto: CreateUserDto = { name: 'Test User', email: 'test@example.com', password: 'password123',confirmPassword:'password123',address:'arya homes',phone_number:12345678 };
-      const result = await userController.signup(dto);
+    const validDto: CreateUserDto = {
+      name: 'Test User',
+      email: 'test@example.com',
+      password: 'password123',
+      confirmPassword: 'password123',
+      address: 'Arya Homes',
+      phone_number: 12345678,
+    };
 
-      expect(userService.signup).toHaveBeenCalledWith(dto);
-      expect(result).toEqual({ id: 1, name: 'Test User', email: 'test@example.com' });
+    it('should call UserService.signup with the correct DTO', async () => {
+      const result = await userController.signup(validDto);
+
+      expect(userService.signup).toHaveBeenCalledWith(validDto);
+      expect(result).toEqual({
+        id: 1,
+        name: 'Test User',
+        email: 'test@example.com',
+      });
+    });
+
+    it('should throw an error if UserService.signup fails', async () => {
+      jest.spyOn(userService, 'signup').mockRejectedValue(new Error('Signup failed'));
+
+      await expect(userController.signup(validDto)).rejects.toThrow('Signup failed');
     });
   });
-
-
-
-
-
-  
 });

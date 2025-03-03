@@ -82,7 +82,7 @@ describe('UserService', () => {
       email: 'john@example.com',
       address: '123 Street',
       password: 'hashedPassword123', 
-     
+      phone_number: 1234567890,
     };
   
     jest.spyOn(userRepository, 'findOne').mockResolvedValueOnce(null);

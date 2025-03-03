@@ -9,47 +9,43 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColum
 @Entity()
 export class Book {
   @PrimaryGeneratedColumn({ name: "book_id" })
-  book_id: number;
+  book_id?: number;
 
   @Column()
-  title: string;
+  title?: string;
 
   @Column()
-  author: string;
+  author?: string;
 
   @Column()
-  description:string;
+  description?:string;
 
   @Column()
-  publisher: string;
+  publisher?: string;
 
   @Column()
-  publication_year: number;
+  publication_year?: number;
 
   @Column()
-  isbn: string; // Changed to string for better compatibility with ISBN formats
+  isbn?: string; 
 
-  // Define the Many-to-One relationship with Category
   @ManyToOne(() => Category, (category) => category.books, { onDelete: "CASCADE" })
-  @JoinColumn({ name: "category_id" }) // Maps the foreign key column
-  category: Category;
+  @JoinColumn({ name: "category_id" }) 
+  category?: Category;
 
   @Column({ name: "copies_available", type: "int" })
-  copies_available: number; 
+  copies_available?: number; 
 
   @Column({ name: "total_copies", type: "int" })
-  total_copies: number;
+  total_copies?: number;
 
-//image
 
-@Column("bytea", { array: true, nullable: true }) // Store multiple images as binary (bytea)
-images: Buffer[]; 
+@Column("bytea", { array: true, nullable: true }) 
+images?: Buffer[]; 
 
-  // Define the One-to-Many relationship with BorrowTransaction
   @OneToMany(() => BorrowTransaction, (borrowTransaction) => borrowTransaction.books)
-  borrowTransactions: BorrowTransaction[];
+  borrowTransactions?: BorrowTransaction[];
 
-  // Define the One-to-Many relationship with Reservation
   @OneToMany(() => Reservation, (reservation) => reservation.books)
-  reservations: Reservation[];
+  reservations?: Reservation[];
 }
