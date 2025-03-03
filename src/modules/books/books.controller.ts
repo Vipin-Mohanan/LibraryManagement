@@ -11,8 +11,8 @@ import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
 import { FileFieldsInterceptor, FileInterceptor } from '@nestjs/platform-express';
 import { memoryStorage } from 'multer';
-import { LibrarianAuthGuard } from 'src/guard/librarian-auth/librarian-auth.guard';
-import { UserAuthGuard } from 'src/guard/user-auth/user-auth.guard';
+import { LibrarianAuthGuard } from '../../guard/librarian-auth/librarian-auth.guard';
+import { UserAuthGuard } from '../../guard/user-auth/user-auth.guard';
 import { addBookChecker } from './addBookChecker.util';
 
 

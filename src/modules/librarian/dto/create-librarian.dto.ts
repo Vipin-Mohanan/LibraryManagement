@@ -11,25 +11,25 @@ export class CreateLibrarianDto {
  
 
     @IsString()
-    name:string
+    name?:string
 
     @IsEmail()
-    email:string
+    email?:string
 
     @IsNumber()
-    phone_number:number
+    phone_number?:number
 
     @IsString()
-    address:string
+    address?:string
 
     @IsString()
-    password:string
+    password?:string
 
     @IsString()
-    confirmPassword:string
+    confirmPassword?:string
 
     @IsEnum(librarianRole)
-    role:librarianRole
+    role?:librarianRole
 
 }
 

@@ -6,28 +6,28 @@ import { librarianRole } from "../dto/create-librarian.dto";
 @Entity()
 export class Librarian {
         @PrimaryGeneratedColumn()
-        librarian_id:number
+        librarian_id?:number
     
         @IsEmpty()
         @Column()
-        name:string
+        name?:string
     
         @IsEmpty()
         @Column()
-        email:string
+        email?:string
     
         @IsEmpty()
         @Column()
-        phone_number:number
+        phone_number?:number
 
         @IsEmpty()
         @Column()
-        password:string
+        password?:string
 
     
         @IsEmpty()
         @Column()
-        address:string
+        address?:string
     
         @IsEmpty()
         @Column(
