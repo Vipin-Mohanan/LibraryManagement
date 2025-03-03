@@ -29,11 +29,14 @@ export class BooksService {
      
     const category = await this.categoryRepo.findOne({where:{category_id:category_id}})
 
+    console.log(category);
+    
+
     if(!category){
       throw new NotFoundException('Category not found')
     }
 
-   const bookData =  this.bookRepo.create({
+   const bookData = this.bookRepo.create({
       title:bookDto.title,
       author:bookDto.author,
       description:bookDto.description,
@@ -46,7 +49,7 @@ export class BooksService {
       images:images
     })
     
-    this.bookRepo.save(bookData)
+    await this.bookRepo.save(bookData)
     return ({
       status:"Success",
       data:bookData
@@ -60,7 +63,7 @@ export class BooksService {
     try {
       const books = await this.bookRepo.find();
 
-      if(!books){
+      if(books.length===0){
         throw new NotFoundException('Books not found')
       }
 

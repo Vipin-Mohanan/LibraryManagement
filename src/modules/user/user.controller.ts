@@ -9,7 +9,6 @@ export class UserController {
   
   @Post('/signup')
   async signup(@Body() userdto :CreateUserDto){
-    
     return await this.userService.signup(userdto)
   }
   
