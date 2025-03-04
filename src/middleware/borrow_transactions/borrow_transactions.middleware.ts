@@ -23,7 +23,11 @@ export class BorrowTransactionsMiddleware implements NestMiddleware {
       else if(req.method==='PATCH' && req.url.includes('/return')){
         next();
       }
+      else if(req.method==='GET' && req.url.includes('/viewBorrowBooks')){
+        next();
+      }
       else{
+        
         throw new ForbiddenException("Invalid method or url")
       }
     }

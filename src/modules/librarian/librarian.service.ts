@@ -41,6 +41,13 @@ export class LibrarianService {
 
           await this.librarianRepository.save(newLibrarian);
 
+          const result = {
+            message: 'Librarian created successfully',
+            data: newLibrarian
+          }
+
+          return result;
+
         }
 
       

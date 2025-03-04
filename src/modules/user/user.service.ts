@@ -38,10 +38,7 @@ export class UserService {
       throw new ForbiddenException('user already exists');
     } else {
       const hashedPassword = await bcrypt.hash(password, 10);
-
-      console.log('hash', hashedPassword);
-
-      const newUser = this.userRepository.create({
+      const newUser = await this.userRepository.create({
         name,
         email,
         password: hashedPassword,

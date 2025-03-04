@@ -15,8 +15,6 @@ export class LibrarianController {
   async registerNewLibrarian(@Body() librarianDTO:CreateLibrarianDto)
   {
     await this.librarianService.registerNewLibrarian(librarianDTO); 
-    
-    return {message: 'Librarian created successfully'};
   }
 
 }

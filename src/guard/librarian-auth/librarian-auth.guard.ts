@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import { verifyJwtToken } from 'src/modules/auth/jwt.util';
+import { verifyJwtToken } from '../../modules/auth/jwt.util';
 
 @Injectable()
 export class LibrarianAuthGuard implements CanActivate {

@@ -1,6 +1,3 @@
-/* eslint-disable prettier/prettier */
-// /* eslint-disable prettier/prettier */
-
 import { 
   Controller, Get, Post, Body, Patch, Param, Query, ParseIntPipe, 
   UseInterceptors, UploadedFiles, 
@@ -11,8 +8,8 @@ import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
 import { FileFieldsInterceptor, FileInterceptor } from '@nestjs/platform-express';
 import { memoryStorage } from 'multer';
-import { LibrarianAuthGuard } from 'src/guard/librarian-auth/librarian-auth.guard';
-import { UserAuthGuard } from 'src/guard/user-auth/user-auth.guard';
+import { LibrarianAuthGuard } from '../../guard/librarian-auth/librarian-auth.guard';
+import { UserAuthGuard } from '../../guard/user-auth/user-auth.guard';
 import { addBookChecker } from './addBookChecker.util';
 
 
@@ -39,39 +36,72 @@ export class BooksController {
 
     await addBookChecker(createBookDto, imageBuffer)
 
-    return await this.booksService.addBook(createBookDto, imageBuffer);
+    const bookData = await this.booksService.addBook(createBookDto, imageBuffer);
+
+    return({
+      status:"Success",
+      data:bookData
+    })
   }
 
   @Get('/getAllBooks')
   @UseGuards(UserAuthGuard)
   async getAllBooks() {
-    return await this.booksService.getAllBooks();
+   const bookData = await this.booksService.getAllBooks();
+
+   return({
+    status:"Success",
+    data:bookData
+  })
   }
 
 
   @Get('/getAllBooksCategorywise')
   @UseGuards(UserAuthGuard)
   async getAllBooksCategorywise(){
-    return await this.booksService.getAllBooksCategorywise();
+    const bookData = await this.booksService.getAllBooksCategorywise();
+
+    console.log("BookData", bookData);
+    
+
+    return({
+      status:"Success",
+      data:bookData
+    })
   }
 
 
   @Get('/getBooksById/:id')
   @UseGuards(UserAuthGuard)
   async getBookById(@Param('id', ParseIntPipe) id: number) {
-    return await this.booksService.getBooksById(id);
+    const book = await this.booksService.getBooksById(id);
+
+    return({
+      status:"Success",
+      data:book
+    })
   }
 
  @Get('/getBooksByCategoryId/:id')
  @UseGuards(UserAuthGuard)
  async getBooksByCategory(@Param('id',ParseIntPipe) id:number){
-  return await this.booksService.getAllBooksByCategory(id)
+  const book = await this.booksService.getAllBooksByCategory(id);
+
+  return({
+    status:"Success",
+    data:book
+  })
  }
 
   @Get('/searchBook')
   @UseGuards(UserAuthGuard)
   async searchBook(@Query('query') query: string) {
-    return await this.booksService.searchBook(query);
+    const bookData = await this.booksService.searchBook(query);
+
+    return({
+      status:"Success",
+      data:bookData
+    })
   }
 
   @Patch('/editBookDetails/:id')
@@ -82,6 +112,11 @@ export class BooksController {
     @Body() bookDto: UpdateBookDto, // Will contain text fields
     @UploadedFiles() images: Express.Multer.File[] 
   ) {
-    return await this.booksService.editBookDetails(id, bookDto, images);
+    const updatedBookData = await this.booksService.editBookDetails(id, bookDto, images);
+
+    return({
+      status:"Success",
+      data:updatedBookData
+    })
   }
 }

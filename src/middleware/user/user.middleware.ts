@@ -4,8 +4,6 @@ import { BadRequestException, ForbiddenException, Injectable, MethodNotAllowedEx
 @Injectable()
 export class UserMiddleware implements NestMiddleware {
   use(req: any, res: any, next: () => void) {
-    
-
     if(req.method==='POST' && req.url.includes('/signup'))
     {
           const {phone_number, name, email, address, password, confirmPassword} = req.body;

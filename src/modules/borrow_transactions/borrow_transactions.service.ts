@@ -18,8 +18,8 @@ export class BorrowTransactionsService {
   ) {}
 
   async borrowBook(borrowDto: CreateBorrowTransactionDto) {
-    console.log(borrowDto);
-    try {
+    // console.log(borrowDto);
+    // try {
       const { user_id, book_id, status } = borrowDto;
       //due date
       const borrowDate = new Date();
@@ -29,61 +29,53 @@ export class BorrowTransactionsService {
         where: { book_id: book_id },
       });
       if (!book_data || book_data.copies_available < 1) {
-        throw new Error('Book is not available for borrowing');
+        throw new ForbiddenException('Book is not available for borrowing');
       }
 
       // Fetch the user details using user_id
       const user_data = await this.UserRepo.findOne({ where: { user_id } });
       if (!user_data) {
-        throw new Error('User not found');
+        throw new ForbiddenException('User not found');
       }
 
-  
-
-      const alreadyBorrowed = await this.borrowRep.createQueryBuilder('borrowTransaction')
-      .innerJoin('borrowTransaction.books', 'books')
-      .innerJoin('borrowTransaction.user', 'user')
-      .where('books.book_id = :book_id', { book_id })
-      .andWhere('user.user_id = :user_id', { user_id })
-      .andWhere('borrowTransaction.return_date IS NULL') // Book is not returned
-      .andWhere('borrowTransaction.status = :status', { status: "borrowed" }) // Status is "borrowed"
-      .getOne();
-  
+      const alreadyBorrowed = await this.borrowRep
+        .createQueryBuilder('borrowTransaction')
+        .innerJoin('borrowTransaction.books', 'books')
+        .innerJoin('borrowTransaction.user', 'user')
+        .where('books.book_id = :book_id', { book_id })
+        .andWhere('user.user_id = :user_id', { user_id })
+        .andWhere('borrowTransaction.return_date IS NULL') // Book is not returned
+        .andWhere('borrowTransaction.status = :status', { status: 'borrowed' }) // Status is "borrowed"
+        .getOne();
 
 
-
-      // console.log("already",alreadyBorrowed);
-
-      const isBorrowed = !!alreadyBorrowed;  // Convert to boolean
+      const isBorrowed = !!alreadyBorrowed; // Convert to boolean
       if (isBorrowed) {
-        throw new Error('Could not fetch book');
-          
+        throw new ForbiddenException('Could not fetch book');
       } else {
-          console.log("The book is available for borrowing.");
+        console.log('The book is available for borrowing.');
       }
 
+      const borrow = await this.borrowRep.create({
+        status: status,
+        due_date: dueDate,
+        books: book_data,
+        user: user_data,
+      });
 
-        const borrow = await this.borrowRep.create({
-          status: status,
-          due_date: dueDate,
-          books: book_data,
-          user: user_data,
-        });
+      await this.borrowRep.save(borrow);
 
-        await this.borrowRep.save(borrow);
+      book_data.copies_available -= 1;
+      const borrowedBook = await this.bookRepo.save(book_data);
 
-        book_data.copies_available -= 1;
-        const borrowedBook = await this.bookRepo.save(book_data);
-
-        return {
-          status: 'success',
-          data: borrowedBook,
-        };
-      
-    } catch (error) {
-      console.error('error fetching book', error);
-      throw new Error('Could not fetch book');
-    }
+      return {
+        status: 'success',
+        data: borrowedBook,
+      };
+    // } catch (error) {
+    //   console.error('error fetching book', error);
+    //   throw new Error('Could not fetch book');
+    // }
   }
 
   async borrowBookDetails(user_id: number) {
@@ -100,44 +92,33 @@ export class BorrowTransactionsService {
     };
   }
 
-  async updateReturnedBook(user_id, book_id)
-  {
+  async updateReturnedBook(user_id, book_id) {
     const borrowLog = await this.borrowRep.findOne({
-      where: { 
-        user: {user_id:user_id}, 
-        books: {book_id:book_id} 
+      where: {
+        user: { user_id: user_id },
+        books: { book_id: book_id },
       },
-      relations:[
-        'user', 'books'
-      ]
+      relations: ['user', 'books'],
     });
 
-    if(!borrowLog)
-    {
+    if (!borrowLog) {
       throw new ForbiddenException('no borrow logs for this user');
     }
 
     const updatedData = await this.borrowRep.update(
       {
-        user:user_id,
-        books:book_id
+        user: user_id,
+        books: book_id,
       },
       {
-        status:'returned',
-        return_date:new Date()
-      }
+        status: 'returned',
+        return_date: new Date(),
+      },
+    );
 
-    )
-
-    return({
-      status:"Success",
-      data:updatedData
-    })
-  
+    return {
+      status: 'Success',
+      data: updatedData,
+    };
   }
-
-    }
-
-
-
-
+}
