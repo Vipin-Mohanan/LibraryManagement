@@ -9,12 +9,20 @@ export class CategoriesController {
 
   @Post('/addCategory')
   async addCategory(@Body() createCategoryDto: CreateCategoryDto) {
-    return await this.categoriesService.addCategory(createCategoryDto);
+      const savedCategory = await this.categoriesService.addCategory(createCategoryDto);
+     return ({
+      status: "success",
+      data:savedCategory
+      });
   }
 
   @Get('/getAll')
   async getAllCategory(){
-    return await this.categoriesService.getAllCategory();
+     const getAllCategories =await this.categoriesService.getAllCategory();
+    return ({
+      status:"Success",
+      data:getAllCategories
+    })
   }
 
   

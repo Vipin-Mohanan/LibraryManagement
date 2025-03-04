@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Module } from '@nestjs/common';
 import { PublishersService } from './publishers.service';
 import { PublishersController } from './publishers.controller';

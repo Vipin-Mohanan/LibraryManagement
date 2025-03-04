@@ -18,8 +18,7 @@ export class BorrowTransactionsService {
   ) {}
 
   async borrowBook(borrowDto: CreateBorrowTransactionDto) {
-    // console.log(borrowDto);
-    // try {
+  
       const { user_id, book_id, status } = borrowDto;
       //due date
       const borrowDate = new Date();
@@ -67,15 +66,7 @@ export class BorrowTransactionsService {
 
       book_data.copies_available -= 1;
       const borrowedBook = await this.bookRepo.save(book_data);
-
-      return {
-        status: 'success',
-        data: borrowedBook,
-      };
-    // } catch (error) {
-    //   console.error('error fetching book', error);
-    //   throw new Error('Could not fetch book');
-    // }
+      return borrowedBook;
   }
 
   async borrowBookDetails(user_id: number) {
@@ -86,13 +77,12 @@ export class BorrowTransactionsService {
       .where('borrowTransaction.return_date IS NULL')
       .andWhere('borrowTransaction.user_id = :user_id', { user_id })
       .getMany();
-    return {
-      status: 'success',
-      data: borrowedBooks,
-    };
+
+    return borrowedBooks;
   }
 
-  async updateReturnedBook(user_id, book_id) {
+  async updateReturnedBook(user_id:number, book_id:number) {
+
     const borrowLog = await this.borrowRep.findOne({
       where: {
         user: { user_id: user_id },
@@ -105,20 +95,11 @@ export class BorrowTransactionsService {
       throw new ForbiddenException('no borrow logs for this user');
     }
 
-    const updatedData = await this.borrowRep.update(
-      {
-        user: user_id,
-        books: book_id,
-      },
-      {
-        status: 'returned',
-        return_date: new Date(),
-      },
-    );
+    borrowLog.status = 'returned';
+    borrowLog.return_date = new Date();
 
-    return {
-      status: 'Success',
-      data: updatedData,
-    };
+    const updatedBook =await this.borrowRep.save(borrowLog)
+
+    return updatedBook;
   }
 }

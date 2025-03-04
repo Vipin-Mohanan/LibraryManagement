@@ -1,5 +1,4 @@
 /* eslint-disable prettier/prettier */
-/* eslint-disable prettier/prettier */
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { Category } from './entities/category.entity';
@@ -21,10 +20,8 @@ export class CategoriesService {
       {
         throw new Error('Cannot add category')
       }
-    return ({
-      status: "success",
-      data:savedCategory
-      });
+   
+    return savedCategory;
   }
 
   async getAllCategory() {
@@ -35,10 +32,9 @@ export class CategoriesService {
       throw new NotFoundException('No categories found')
     }
 
-    return ({
-      status:"Success",
-      data:getAllCategories
-    })
+
+    return getAllCategories;
+    
   }
   
 }
