@@ -50,10 +50,9 @@ describe('CategoriesService', () => {
   
       expect(categoryRepo.create).toHaveBeenCalledWith(categoryDto);
       expect(categoryRepo.save).toHaveBeenCalledWith(createdCategory);
-      expect(result).toEqual({
-        status: 'success',
-        data: createdCategory,
-      });
+      expect(result).toEqual(
+        createdCategory,
+      );
     });
   });
 
@@ -69,10 +68,7 @@ describe('CategoriesService', () => {
       const result = await service.getAllCategory();
   
       expect(categoryRepo.find).toHaveBeenCalled();
-      expect(result).toEqual({
-        status: 'Success',
-        data: mockCategories,
-      });
+      expect(result).toEqual(mockCategories);
     });
   
     it('should throw NotFoundException if no categories are found', async () => {

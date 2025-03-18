@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable} from '@nestjs/common';
 import { CreateBookDto } from './dto/create-book.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import {  Repository } from 'typeorm';
@@ -6,6 +6,7 @@ import { Book } from './entities/book.entity';
 import { Category } from '../categories/entities/category.entity';
 import { UpdateBookDto } from './dto/update-book.dto';
 import * as fs from 'fs';
+import { BookNotFoundError, CategoryNotFoundError } from 'src/filters/errorMessage';
 
 @Injectable()
 export class BooksService {
@@ -23,11 +24,8 @@ export class BooksService {
      
     const category = await this.categoryRepo.findOne({where:{category_id:category_id}})
 
-    console.log(category);
-    
-
     if(!category){
-      throw new NotFoundException('Category not found')
+      CategoryNotFoundError()
     }
 
    const bookData = this.bookRepo.create({
@@ -56,7 +54,7 @@ export class BooksService {
       const books = await this.bookRepo.find();
 
       if(books.length===0){
-        throw new NotFoundException('Books not found')
+        BookNotFoundError()      
       }
 
       return books;
@@ -71,7 +69,7 @@ export class BooksService {
       });
 
       if (!book) {
-        throw new NotFoundException('Books not found');
+        BookNotFoundError()  
       }
       return book; 
 
@@ -89,7 +87,7 @@ export class BooksService {
         .getMany();
 
       if (book.length===0) {
-        throw new NotFoundException('Books not found');
+        BookNotFoundError()   
       }
 
       return book;
@@ -101,7 +99,7 @@ export class BooksService {
       const book = await this.bookRepo.findOne({ where: { book_id: id } });
 
       if (!book) {
-        throw new NotFoundException('Book not found');
+
       }
 
       if (images && images.length > 0) {
@@ -119,7 +117,6 @@ export class BooksService {
       const updatedBook = Object.assign(book, bookDto);
       await this.bookRepo.save(updatedBook);
       
-    
 
       return updatedBook;
       
@@ -132,8 +129,8 @@ export class BooksService {
       });
 
       if (!books) {
-        throw new NotFoundException('Books not found');
-      }
+        BookNotFoundError()       
+        }
 
       return books;
 
@@ -148,8 +145,8 @@ export class BooksService {
         .getMany();
 
       if (books.length==0) {
-        throw new NotFoundException('Books not found');
-      }
+        BookNotFoundError()  
+             }
 
       const categorizedBooks = books.reduce((acc, book) => {
         const categoryName = book.category.category_name;

@@ -7,6 +7,7 @@ import { Repository } from 'typeorm';
 import { Librarian } from '../librarian/entities/librarian.entity';
 import * as bcrypt from 'bcryptjs';
 import { generateJwtToken } from './jwt.util';
+import { UserNotFoundError } from 'src/filters/errorMessage';
 
 @Injectable()
 export class AuthService {
@@ -42,7 +43,7 @@ export class AuthService {
     }
    }
 
-   else{
+   else if(librarian!=null){
     if (librarian && await bcrypt.compare(password, librarian.password)) {
 
       const jwtToken = await generateJwtToken(librarian.email, librarian.librarian_id, librarian.role);
@@ -54,8 +55,11 @@ export class AuthService {
         token: jwtToken};
     }
    }
-   
-    return { message: 'invalid user' };
+
+   else
+   {
+    UserNotFoundError()
+   }
    
   }
 }

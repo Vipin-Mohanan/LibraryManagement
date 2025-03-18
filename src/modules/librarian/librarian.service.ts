@@ -1,11 +1,12 @@
 /* eslint-disable prettier/prettier */
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateLibrarianDto} from './dto/create-librarian.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Librarian } from './entities/librarian.entity';
 import * as bcrypt from 'bcryptjs';
 import { Repository } from 'typeorm';
 import { User } from '../user/entities/user.entity';
+import { UserAlreadyExistError } from 'src/filters/errorMessage';
 
 @Injectable()
 export class LibrarianService {
@@ -21,7 +22,7 @@ export class LibrarianService {
 
         if(existingLibrarian)
         {
-          throw new ForbiddenException('Librarian already exists');
+          UserAlreadyExistError()
         }
 
         else{

@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BorrowTransaction } from './entities/borrow_transaction.entity';
 import { Repository } from 'typeorm';
@@ -7,6 +7,7 @@ import { Book } from '../books/entities/book.entity';
 import { CreateBorrowTransactionDto } from './dto/create-borrow_transaction.dto';
 import { User } from '../user/entities/user.entity';
 import { addDays } from 'date-fns';
+import { BookNotBorrowError, BorrowLogNotAvailableError, UserNotFoundError } from 'src/filters/errorMessage';
 
 @Injectable()
 export class BorrowTransactionsService {
@@ -18,8 +19,7 @@ export class BorrowTransactionsService {
   ) {}
 
   async borrowBook(borrowDto: CreateBorrowTransactionDto) {
-    // console.log(borrowDto);
-    // try {
+  
       const { user_id, book_id, status } = borrowDto;
       //due date
       const borrowDate = new Date();
@@ -29,13 +29,13 @@ export class BorrowTransactionsService {
         where: { book_id: book_id },
       });
       if (!book_data || book_data.copies_available < 1) {
-        throw new ForbiddenException('Book is not available for borrowing');
+        BookNotBorrowError()
       }
 
       // Fetch the user details using user_id
       const user_data = await this.UserRepo.findOne({ where: { user_id } });
       if (!user_data) {
-        throw new ForbiddenException('User not found');
+        UserNotFoundError()
       }
 
       const alreadyBorrowed = await this.borrowRep
@@ -51,10 +51,8 @@ export class BorrowTransactionsService {
 
       const isBorrowed = !!alreadyBorrowed; // Convert to boolean
       if (isBorrowed) {
-        throw new ForbiddenException('Could not fetch book');
-      } else {
-        console.log('The book is available for borrowing.');
-      }
+        BookNotBorrowError()     
+       }
 
       const borrow = await this.borrowRep.create({
         status: status,
@@ -67,15 +65,7 @@ export class BorrowTransactionsService {
 
       book_data.copies_available -= 1;
       const borrowedBook = await this.bookRepo.save(book_data);
-
-      return {
-        status: 'success',
-        data: borrowedBook,
-      };
-    // } catch (error) {
-    //   console.error('error fetching book', error);
-    //   throw new Error('Could not fetch book');
-    // }
+      return borrowedBook;
   }
 
   async borrowBookDetails(user_id: number) {
@@ -86,13 +76,17 @@ export class BorrowTransactionsService {
       .where('borrowTransaction.return_date IS NULL')
       .andWhere('borrowTransaction.user_id = :user_id', { user_id })
       .getMany();
-    return {
-      status: 'success',
-      data: borrowedBooks,
-    };
+
+      if(!borrowedBooks)
+      {
+        BorrowLogNotAvailableError()
+      }
+
+    return borrowedBooks;
   }
 
-  async updateReturnedBook(user_id, book_id) {
+  async updateReturnedBook(user_id:number, book_id:number) {
+
     const borrowLog = await this.borrowRep.findOne({
       where: {
         user: { user_id: user_id },
@@ -102,23 +96,14 @@ export class BorrowTransactionsService {
     });
 
     if (!borrowLog) {
-      throw new ForbiddenException('no borrow logs for this user');
+      BorrowLogNotAvailableError()
     }
 
-    const updatedData = await this.borrowRep.update(
-      {
-        user: user_id,
-        books: book_id,
-      },
-      {
-        status: 'returned',
-        return_date: new Date(),
-      },
-    );
+    borrowLog.status = 'returned';
+    borrowLog.return_date = new Date();
 
-    return {
-      status: 'Success',
-      data: updatedData,
-    };
+    const updatedBook =await this.borrowRep.save(borrowLog)
+
+    return updatedBook;
   }
 }
