@@ -94,7 +94,7 @@ describe('UserService', () => {
     const result = await userService.signup(userDto);
     expect(result).toEqual(userWithHashedPassword);  
     expect(userRepository.create).toHaveBeenCalledWith(expect.objectContaining({
-       name: 'John Doe',
+      name: 'John Doe',
       email: 'john@example.com',
       address: '123 Street',
       password: 'hashedPassword123',  

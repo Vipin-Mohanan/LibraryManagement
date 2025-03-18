@@ -57,7 +57,7 @@ describe('LibrarianService', () => {
       jest.spyOn(librarianRepository, 'create').mockReturnValue(librarianDto as Librarian);
       jest.spyOn(librarianRepository, 'save').mockResolvedValue(librarianDto as Librarian);
 
-      await expect(librarianService.registerNewLibrarian(librarianDto)).resolves.not.toThrow();
+      await expect(librarianService.registerNewLibrarian(librarianDto)).resolves.not.toThrow(ForbiddenException);
       expect(librarianRepository.create).toHaveBeenCalledWith({
         name: librarianDto.name,
         email: librarianDto.email,
@@ -68,6 +68,22 @@ describe('LibrarianService', () => {
       });
       expect(librarianRepository.save).toHaveBeenCalled();
     });
+
+    it('should return a successful message if the librarian is successfully inserted', async()=>{
+      jest.spyOn(librarianRepository, 'findOne').mockResolvedValue(null);
+      jest.spyOn(userRepository, 'findOne').mockResolvedValue(null);
+      jest.spyOn(bcrypt, 'hash').mockResolvedValue('hashedPassword');
+      jest.spyOn(librarianRepository, 'create').mockReturnValue(librarianDto as Librarian);
+      jest.spyOn(librarianRepository, 'save').mockResolvedValue(librarianDto as Librarian);
+      
+      const result = await librarianService.registerNewLibrarian(librarianDto);
+      expect(result).toEqual(
+        {
+          message: 'Librarian created successfully',
+          data: librarianDto
+        }
+      )
+    })
 
     it('should throw ForbiddenException if librarian already exists', async () => {
       jest.spyOn(librarianRepository, 'findOne').mockResolvedValue(librarianDto as Librarian);
