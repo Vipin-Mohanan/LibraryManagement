@@ -4,7 +4,7 @@ import { CreateCategoryDto } from './dto/create-category.dto';
 import { Category } from './entities/category.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AddCategoryError, CategoryNotFoundError } from 'src/filters/errorMessage';
+import { AddCategoryError, CategoryNotFoundError } from '../../filters/errorMessage';
 
 @Injectable()
 export class CategoriesService {

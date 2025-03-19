@@ -75,7 +75,7 @@ describe('CategoriesService', () => {
       categoryRepo.find = jest.fn().mockResolvedValue([]);
   
       await expect(service.getAllCategory()).rejects.toThrow(
-        new NotFoundException('No categories found'),
+        new NotFoundException('Category not found'),
       );
     });
   });

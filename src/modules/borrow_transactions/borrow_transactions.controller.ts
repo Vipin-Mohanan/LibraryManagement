@@ -11,7 +11,7 @@ import {
 import { BorrowTransactionsService } from './borrow_transactions.service';
 import { CreateBorrowTransactionDto } from './dto/create-borrow_transaction.dto';
 import { UserAuthGuard } from '../../guard/user-auth/user-auth.guard';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('borrow')
 @Controller('borrow')
@@ -37,6 +37,7 @@ export class BorrowTransactionsController {
    * ```
    */
 
+  @ApiBearerAuth()
   @Post('/borrowBook')
   @UseGuards(UserAuthGuard)
   @ApiOperation({ summary: 'Borrow book' })
@@ -70,6 +71,7 @@ export class BorrowTransactionsController {
 
   @Get('/viewBorrowBooks/:id')
   @UseGuards(UserAuthGuard)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Borrow book details' })
   @ApiResponse({
     status: 201,
@@ -94,7 +96,7 @@ export class BorrowTransactionsController {
    * @returns {Promise<{ status: string; data: { returnDate: string } }>} 
   
    */
-
+  @ApiBearerAuth()
   @Patch('/return')
   @UseGuards(UserAuthGuard)
   @ApiOperation({ summary: 'Return the book' })
