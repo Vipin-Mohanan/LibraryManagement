@@ -1,3 +1,4 @@
+// Importing required services, DTOs, guards, and utilities
 import { 
   Controller, Get, Post, Body, Patch, Param, Query, ParseIntPipe, 
   UseInterceptors, UploadedFiles, 
@@ -13,11 +14,21 @@ import { UserAuthGuard } from '../../guard/user-auth/user-auth.guard';
 import { addBookChecker } from './addBookChecker.util';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
+// Controller for managing book-related operations
 @ApiTags('books')
 @ApiBearerAuth()
 @Controller('books')
 export class BooksController {
   constructor(private readonly booksService: BooksService) {}
+
+ /**
+ * Adds a new book to the system.
+ * Only accessible to librarians.
+ * Accepts multipart form-data for file uploads (up to 5 images).
+ * @param createBookDto - The data transfer object containing book details (e.g., title, author, category).
+ * @param files - An object containing uploaded images in buffer format.
+ * @returns A response indicating the success of the book addition along with the saved book data.
+ */
 
   @Post('/addBook')
   @UseGuards(LibrarianAuthGuard)
@@ -57,7 +68,12 @@ export class BooksController {
     })
   }
 
-  @ApiOperation({ summary: 'get all books' })
+  /**
+ * Retrieves a list of all books available in the system.
+ * Only accessible to authenticated users.
+ * @returns A response containing an array of book objects.
+ */
+
   @Get('/getAllBooks')
   @UseGuards(UserAuthGuard)
   @ApiOperation({ summary: 'Get all books' })
@@ -71,7 +87,13 @@ export class BooksController {
   })
   }
 
-  @ApiOperation({ summary: 'get all books categorywise' })
+
+  /**
+ * Retrieves all books grouped by their respective categories.
+ * Only accessible to authenticated users.
+ * @returns A response containing books categorized accordingly.
+ */
+
   @Get('/getAllBooksCategorywise')
   @UseGuards(UserAuthGuard)
   @ApiOperation({ summary: 'Get all books categoryWise' })
@@ -85,6 +107,12 @@ export class BooksController {
     })
   }
 
+/**
+ * Fetches the details of a specific book by its unique ID.
+ * Only accessible to authenticated users.
+ * @param id - The unique identifier of the book.
+ * @returns A response containing book details if found.
+ */
 
   @Get('/getBooksById/:id')
   @UseGuards(UserAuthGuard)
@@ -98,6 +126,12 @@ export class BooksController {
       data:book
     })
   }
+/**
+ * Retrieves all books belonging to a specific category based on the provided category ID.
+ * Only accessible to authenticated users.
+ * @param id - The unique identifier of the category.
+ * @returns A response containing an array of books within the specified category.
+ */
 
  @Get('/getBooksByCategoryId/:id')
  @UseGuards(UserAuthGuard)
@@ -112,6 +146,14 @@ export class BooksController {
   })
  }
 
+ 
+ /**
+ * Searches for books based on a query string.
+ * Only accessible to authenticated users.
+ * @param query - The search string used to find relevant books (e.g., title, author).
+ * @returns A response containing matching books.
+ */
+
   @Get('/searchBook')
   @UseGuards(UserAuthGuard)
   @ApiOperation({ summary: 'Search Books' })
@@ -124,6 +166,16 @@ export class BooksController {
       data:bookData
     })
   }
+  
+/**
+ * Updates the details of an existing book based on its unique ID.
+ * Only accessible to librarians.
+ * Accepts file uploads for updating book images.
+ * @param id - The unique identifier of the book.
+ * @param bookDto - The data transfer object containing updated book details.
+ * @param images - An array of uploaded image files (optional).
+ * @returns A response containing the updated book details.
+ */
 
   @Patch('/editBookDetails/:id')
   @UseGuards(LibrarianAuthGuard)

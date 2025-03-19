@@ -16,6 +16,13 @@ export class BooksService {
     private readonly categoryRepo: Repository<Category>,
   ) {}
 
+/**
+   * Adds a new book to the system.
+   * @param bookDto - The data transfer object containing book details.
+   * @param images - An array of image buffers for the book.
+   * @returns The newly added book object.
+   * @throws CategoryNotFoundError if the specified category does not exist.
+   */
   async addBook(bookDto: CreateBookDto,images: Buffer[]) {
    
 
@@ -28,6 +35,7 @@ export class BooksService {
       CategoryNotFoundError()
     }
 
+    // Create a new book entity
    const bookData = this.bookRepo.create({
       title:bookDto.title,
       author:bookDto.author,
@@ -41,6 +49,7 @@ export class BooksService {
       images:images
     })
     
+    // Save book to the database
     await this.bookRepo.save(bookData)
     return bookData
   
@@ -49,7 +58,12 @@ export class BooksService {
    }
   }
 
-  async getAllBooks() {
+ /**
+   * Retrieves all books from the database.
+   * @returns An array of book objects.
+   * @throws BookNotFoundError if no books are found.
+   */
+    async getAllBooks() {
  
       const books = await this.bookRepo.find();
 
@@ -61,7 +75,13 @@ export class BooksService {
       
   }
 
-  async getBooksById(id: number) {
+/**
+   * Retrieves a specific book by its ID.
+   * @param id - The unique identifier of the book.
+   * @returns The book object if found.
+   * @throws BookNotFoundError if the book does not exist.
+   */
+    async getBooksById(id: number) {
     
       const book = await this.bookRepo.findOne({
         where: { book_id: id },
@@ -75,7 +95,13 @@ export class BooksService {
 
   }
 
-  async searchBook(query: string) {
+ /**
+   * Searches for books based on title, author, ISBN, or category name.
+   * @param query - The search query string.
+   * @returns An array of books matching the search criteria.
+   * @throws BookNotFoundError if no matching books are found.
+   */
+    async searchBook(query: string) {
     
       const book = await this.bookRepo
         .createQueryBuilder('book')
@@ -94,7 +120,16 @@ export class BooksService {
     
   }
 
-  async editBookDetails(id: number,bookDto: UpdateBookDto,images: Express.Multer.File[],)
+
+  /**
+   * Updates the details of an existing book.
+   * @param id - The unique identifier of the book.
+   * @param bookDto - The data transfer object containing updated book details.
+   * @param images - An array of uploaded image files.
+   * @returns The updated book object.
+   * @throws BookNotFoundError if the book does not exist.
+   */
+    async editBookDetails(id: number,bookDto: UpdateBookDto,images: Express.Multer.File[],)
    {
       const book = await this.bookRepo.findOne({ where: { book_id: id } });
 
@@ -102,6 +137,7 @@ export class BooksService {
 
       }
 
+    // Update images if provided
       if (images && images.length > 0) {
         book.images = await Promise.all(
           images.map(async (file) => {
@@ -122,7 +158,13 @@ export class BooksService {
       
 }
 
-  async getAllBooksByCategory(id: number) {
+  /**
+   * Retrieves all books belonging to a specific category.
+   * @param id - The unique identifier of the category.
+   * @returns An array of books within the specified category.
+   * @throws BookNotFoundError if no books are found in the category.
+   */
+    async getAllBooksByCategory(id: number) {
       const books = await this.bookRepo.find({
         where: { category: { category_id: id } },
         relations: ['category'],
@@ -136,7 +178,13 @@ export class BooksService {
 
   }
 
-  async getAllBooksCategorywise() {
+
+  /**
+   * Retrieves all books grouped by category.
+   * @returns An array of objects containing categories and their associated books.
+   * @throws BookNotFoundError if no books are found.
+   */
+    async getAllBooksCategorywise() {
 
       const books = await this.bookRepo
         .createQueryBuilder('book')
@@ -148,6 +196,7 @@ export class BooksService {
         BookNotFoundError()  
              }
 
+      // Group books by category
       const categorizedBooks = books.reduce((acc, book) => {
         const categoryName = book.category.category_name;
 
@@ -159,6 +208,7 @@ export class BooksService {
         return acc; 
       }, {}); 
 
+       // Convert grouped books into an array
       const categorizedBooksArray = Object.entries(categorizedBooks).map(
         ([category, books]) => ({
           category,

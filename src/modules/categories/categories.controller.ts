@@ -2,10 +2,11 @@
 import { Controller, Get, Post, Body, UseGuards} from '@nestjs/common';
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UserAuthGuard } from 'src/guard/user-auth/user-auth.guard';
 
 @ApiTags('categories')
+@ApiBearerAuth()
 @Controller('categories')
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}

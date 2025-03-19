@@ -15,7 +15,7 @@ export class UserService {
 
     @InjectRepository(Librarian)
     private readonly librarianRepository: Repository<Librarian>,
-  ) {}
+  ) { }
 
   /**
    * Handles user signup by creating a new user in the system.
@@ -31,7 +31,7 @@ export class UserService {
     const { name, email, address, password, phone_number } = userdto;
     const existingUser =
       (await this.userRepository.findOne({ where: { email } })) ||
-      (await this.librarianRepository.findOne({ where: { email } }));
+      (await this.librarianRepository.findOne({where: { email }}));
 
     if (existingUser) {
       UserAlreadyExistError();
