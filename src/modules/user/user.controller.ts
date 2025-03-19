@@ -8,14 +8,6 @@ import { ApiTags } from '@nestjs/swagger';
  * Handles user signup by creating a new user in the system.
  * @param {CreateUserDto} userdto - The user data transfer object containing user details.
  * @returns {Promise<any>} The created user data or an appropriate response.
- * @example
- * ```json
- * {
- *   "username": "john",
- *   "email": "john@example.com",
- *   "password": "password"
- * }
- * ```
  */
 @ApiTags('user')
 @Controller('user')

@@ -92,11 +92,7 @@ export class BorrowTransactionsController {
    * @param {number} user_id - The ID of the user returning the book.
    * @param {number} book_id - The ID of the book being returned.
    * @returns {Promise<{ status: string; data: { returnDate: string } }>} 
-   * A response indicating the return date of the book.
-   * @example
-   * ```typescript
-   * PATCH /borrow/return?user_id=1&book_id=101
-   * ```
+  
    */
 
   @Patch('/return')

@@ -45,11 +45,6 @@ export class CategoriesService {
    * 
    * @returns {Promise<Category[]>} A list of all available categories.
    * @throws {Error} If no categories are found (calls `CategoryNotFoundError`).
-   * @example
-   * ```typescript
-   * const categories = await categoriesService.getAllCategory();
-   * console.log(categories);
-   * ```
    */
   async getAllCategory() {
     const getAllCategories = await this.categoryRepo.find();

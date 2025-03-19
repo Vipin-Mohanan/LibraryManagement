@@ -15,11 +15,6 @@ export class CategoriesController {
    * 
    * @param {CreateCategoryDto} createCategoryDto - The category details to be added.
    * @returns {Promise<{ status: string, data: any }>} The saved category data.
-   * @example
-   * ```
-   * const categoryDto = { name: 'Science Fiction' };
-   * const response = await categoriesController.addCategory(categoryDto);
-   * ```
    */
 
   @Post('/addCategory')
@@ -38,10 +33,6 @@ export class CategoriesController {
    * Retrieves all available categories.
    * 
    * @returns {Promise<{ status: string, data: any[] }>} A list of all categories.
-   * @example
-   * ```
-   * const categories = await categoriesController.getAllCategory();
-   * ```
    */
 
   @Get('/getAll')

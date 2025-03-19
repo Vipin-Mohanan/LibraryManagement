@@ -31,15 +31,6 @@ export class BorrowTransactionsService {
    * @returns {Promise<Book>} The borrowed book data with updated availability.
    * @throws {BookNotBorrowError} If the book is unavailable or the user has already borrowed it.
    * @throws {UserNotFoundError} If the user does not exist.
-   * @example
-   * ```
-   * const borrowDto = {
-   *   user_id: 1,
-   *   book_id: 101,
-   *   status: "borrowed"
-   * };
-   * const borrowedBook = await borrowTransactionsService.borrowBook(borrowDto);
-   * ```
    */
   async borrowBook(borrowDto: CreateBorrowTransactionDto) {
     const { user_id, book_id, status } = borrowDto;
@@ -95,10 +86,6 @@ export class BorrowTransactionsService {
    * @param {number} user_id - The ID of the user.
    * @returns {Promise<BorrowTransaction[]>} The list of borrowed books.
    * @throws {BorrowLogNotAvailableError} If no borrowed books are found for the user.
-   * @example
-   * ```
-   * const borrowedBooks = await borrowTransactionsService.borrowBookDetails(1);
-   * ```
    */
 
   async borrowBookDetails(user_id: number) {
@@ -125,10 +112,6 @@ export class BorrowTransactionsService {
    * @param {number} book_id - The ID of the book being returned.
    * @returns {Promise<BorrowTransaction>} The updated borrow transaction data.
    * @throws {BorrowLogNotAvailableError} If no active borrow transaction is found for the given user and book.
-   * @example
-   * ```
-   * const updatedTransaction = await borrowTransactionsService.updateReturnedBook(1, 101);
-   * ```
    */
 
   async updateReturnedBook(user_id: number, book_id: number) {

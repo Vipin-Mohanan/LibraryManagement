@@ -5,11 +5,9 @@ export class CreateBorrowTransactionDto {
 
 
     @ApiProperty()
-    @ApiProperty()
     @IsNumber()
     book_id :number
 
-    @ApiProperty()
     @ApiProperty()
     @IsNumber()
     user_id :number
@@ -19,16 +17,13 @@ export class CreateBorrowTransactionDto {
     borrow_date:string | null;
 
     @ApiProperty()
-    @ApiProperty()
     @IsOptional()
     due_date:string | null;
 
     @ApiProperty()
-    @ApiProperty()
     @IsString()
     status:string
 
-    @ApiProperty()
     @ApiProperty()
     @IsOptional() // Allows return_date to be omitted or set as null
     return_date?: string | null;

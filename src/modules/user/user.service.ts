@@ -25,17 +25,6 @@ export class UserService {
    * @param {CreateUserDto} userdto - The user details including name, email, address, password, and phone number.
    * @returns {Promise<User>} The created user entity.
    * @throws {UserAlreadyExistError} If a user or librarian with the given email already exists.
-   * @example
-   * ```typescript
-   * const userDto = {
-   *   name: "John",
-   *   email: "john@example.com",
-   *   address: "123 Street",
-   *   password: "password",
-   *   phone_number: "1234567890"
-   * };
-   * const newUser = await userService.signup(userDto);
-   * ```
    */
 
   async signup(userdto: CreateUserDto) {
