@@ -2,9 +2,10 @@ import { Controller, Get, Post, Body, Patch, Param, Query, UseGuards } from '@ne
 import { BorrowTransactionsService } from './borrow_transactions.service';
 import { CreateBorrowTransactionDto } from './dto/create-borrow_transaction.dto';
 import { UserAuthGuard } from '../../guard/user-auth/user-auth.guard';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('borrow')
+@ApiBearerAuth()
 @Controller('borrow')
 export class BorrowTransactionsController {
   constructor(private readonly borrowTransactionsService: BorrowTransactionsService) {}

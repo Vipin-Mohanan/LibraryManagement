@@ -25,7 +25,7 @@ export class AuthService {
     const librarian = await this.librarianrepository.findOne({where:{email}});
     
     if(!user && !librarian){
-      return { message: 'user not exists' };
+      UserNotFoundError()
     }
 
    if(user!=null)
