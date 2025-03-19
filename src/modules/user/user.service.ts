@@ -17,18 +17,34 @@ export class UserService {
     private readonly librarianRepository: Repository<Librarian>,
   ) {}
 
+  /**
+   * Handles user signup by creating a new user in the system.
+   * Checks if a user or librarian with the given email already exists.
+   * If the email is unique, the password is hashed, and a new user is created.
+   *
+   * @param {CreateUserDto} userdto - The user details including name, email, address, password, and phone number.
+   * @returns {Promise<User>} The created user entity.
+   * @throws {UserAlreadyExistError} If a user or librarian with the given email already exists.
+   * @example
+   * ```typescript
+   * const userDto = {
+   *   name: "John",
+   *   email: "john@example.com",
+   *   address: "123 Street",
+   *   password: "password",
+   *   phone_number: "1234567890"
+   * };
+   * ```
+   */
+
   async signup(userdto: CreateUserDto) {
-
-    const { name, email, address, password, phone_number } =userdto;
-
-      console.log("User:", userdto);
-      
+    const { name, email, address, password, phone_number } = userdto;
     const existingUser =
       (await this.userRepository.findOne({ where: { email } })) ||
       (await this.librarianRepository.findOne({ where: { email } }));
 
     if (existingUser) {
-      UserAlreadyExistError()
+      UserAlreadyExistError();
     } else {
       const hashedPassword = await bcrypt.hash(password, 10);
       const newUser = await this.userRepository.create({

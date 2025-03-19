@@ -19,7 +19,6 @@ import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiResponse, ApiTags
 export class BooksController {
   constructor(private readonly booksService: BooksService) {}
 
-  @ApiOperation({ summary: 'add books' })
   @Post('/addBook')
   @UseGuards(LibrarianAuthGuard)
   @UseInterceptors(

@@ -9,7 +9,6 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @ApiOperation({ summary: 'user and admin Login' })
   @Post('/login')
   @ApiOperation({ summary: 'User Login' })
   @ApiResponse({ status: 201, description: 'User logined successfully' })
