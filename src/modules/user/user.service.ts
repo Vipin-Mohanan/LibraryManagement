@@ -34,6 +34,7 @@ export class UserService {
    *   password: "password",
    *   phone_number: "1234567890"
    * };
+   * const newUser = await userService.signup(userDto);
    * ```
    */
 

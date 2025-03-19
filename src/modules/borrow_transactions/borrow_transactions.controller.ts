@@ -27,7 +27,6 @@ export class BorrowTransactionsController {
    * @param {CreateBorrowTransactionDto} borrowdto - The request body containing borrow transaction details.
    * @returns {Promise<{ status: string; data: { book_id: number; copies_available: number } }>} 
    * An object containing the borrowed book ID and the remaining available copies.
-   * @throws {BadRequestException} If the book is not available or invalid data is provided.
    * @example
    * ```json
    * {
@@ -63,7 +62,6 @@ export class BorrowTransactionsController {
    * 
    * @param {string} id - The ID of the user.
    * @returns {Promise<{ status: string; data: any }>} A success response containing borrowed book details.
-   * @throws {NotFoundException} If no borrowed books are found.
    * @example
    * ```typescript
    * GET /borrow/viewBorrowBooks/1
@@ -95,7 +93,6 @@ export class BorrowTransactionsController {
    * @param {number} book_id - The ID of the book being returned.
    * @returns {Promise<{ status: string; data: { returnDate: string } }>} 
    * A response indicating the return date of the book.
-   * @throws {BadRequestException} If the book return request is invalid.
    * @example
    * ```typescript
    * PATCH /borrow/return?user_id=1&book_id=101
