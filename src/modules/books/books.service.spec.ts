@@ -1,12 +1,10 @@
-/* eslint-disable prettier/prettier */
 import { Test, TestingModule } from '@nestjs/testing';
 import { BooksService } from './books.service';
 import { Book } from './entities/book.entity';
 import { Repository } from 'typeorm';
 import { Category } from '../categories/entities/category.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { ForbiddenException, NotFoundException } from '@nestjs/common';
-import { CreateBookDto } from './dto/create-book.dto';
+import {  NotFoundException } from '@nestjs/common';
 import { UpdateBookDto } from './dto/update-book.dto';
 
 describe('BooksService', () => {
@@ -122,10 +120,7 @@ describe('BooksService', () => {
         expect.objectContaining(bookData),
       );
       expect(bookRepo.save).toHaveBeenCalledWith(bookData);
-      expect(result).toEqual({
-        status: 'Success',
-        data: bookData,
-      });
+      expect(result).toEqual(bookData);
     });
   });
 
@@ -154,10 +149,7 @@ describe('BooksService', () => {
       jest.spyOn(bookRepo, 'find').mockResolvedValue(mockBooks);
       const result = await bookService.getAllBooks();
       expect(bookRepo.find).toHaveBeenCalledTimes(1);
-      expect(result).toEqual({
-        status: 'Success',
-        data: mockBooks,
-      });
+      expect(result).toEqual(mockBooks);
     });
   });
 
@@ -184,10 +176,7 @@ describe('BooksService', () => {
 
       jest.spyOn(bookRepo, 'findOne').mockResolvedValue(mockBook);
       const result = await bookService.getBooksById(1);
-      expect(result).toEqual({
-        status: 'Success',
-        data: mockBook,
-      });
+      expect(result).toEqual(mockBook);
     });
   });
 
@@ -228,10 +217,7 @@ describe('BooksService', () => {
 
       const result = await bookService.searchBook('Book Title');
 
-      expect(result).toEqual({
-        status: 'success',
-        data: mockBook,
-      });
+      expect(result).toEqual( mockBook);
     });
   });
 
@@ -275,9 +261,8 @@ describe('BooksService', () => {
 
       const result = await bookService.getAllBooksCategorywise();
 
-      expect(result).toEqual({
-        status: 'success',
-        data: [
+      expect(result).toEqual(
+         [
           {
             category: 'Fiction',
             books: [
@@ -304,7 +289,7 @@ describe('BooksService', () => {
             ],
           },
         ],
-      });
+      );
 
       expect(bookRepo.createQueryBuilder).toHaveBeenCalled();
     });
@@ -354,10 +339,7 @@ describe('BooksService', () => {
 
       expect(bookRepo.findOne).toHaveBeenCalledWith({ where: { book_id: 1 } });
       expect(bookRepo.save).toHaveBeenCalledWith(updatedBook);
-      expect(result).toEqual({
-        status: 'success',
-        data: updatedBook,
-      });
+      expect(result).toEqual(updatedBook);
     });
   });
 });

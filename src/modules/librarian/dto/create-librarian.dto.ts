@@ -30,7 +30,6 @@ export class CreateLibrarianDto {
     @IsString()
     password?:string
 
-
     @ApiProperty()
     @IsString()
     confirmPassword?:string

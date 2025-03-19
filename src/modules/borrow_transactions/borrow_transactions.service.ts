@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BorrowTransaction } from './entities/borrow_transaction.entity';
 import { Repository } from 'typeorm';
@@ -7,6 +7,7 @@ import { Book } from '../books/entities/book.entity';
 import { CreateBorrowTransactionDto } from './dto/create-borrow_transaction.dto';
 import { User } from '../user/entities/user.entity';
 import { addDays } from 'date-fns';
+import { BookNotBorrowError, BorrowLogNotAvailableError, UserNotFoundError } from 'src/filters/errorMessage';
 
 @Injectable()
 export class BorrowTransactionsService {
@@ -28,13 +29,13 @@ export class BorrowTransactionsService {
         where: { book_id: book_id },
       });
       if (!book_data || book_data.copies_available < 1) {
-        throw new ForbiddenException('Book is not available for borrowing');
+        BookNotBorrowError()
       }
 
       // Fetch the user details using user_id
       const user_data = await this.UserRepo.findOne({ where: { user_id } });
       if (!user_data) {
-        throw new ForbiddenException('User not found');
+        UserNotFoundError()
       }
 
       const alreadyBorrowed = await this.borrowRep
@@ -50,10 +51,8 @@ export class BorrowTransactionsService {
 
       const isBorrowed = !!alreadyBorrowed; // Convert to boolean
       if (isBorrowed) {
-        throw new ForbiddenException('Could not fetch book');
-      } else {
-        console.log('The book is available for borrowing.');
-      }
+        BookNotBorrowError()     
+       }
 
       const borrow = await this.borrowRep.create({
         status: status,
@@ -78,6 +77,11 @@ export class BorrowTransactionsService {
       .andWhere('borrowTransaction.user_id = :user_id', { user_id })
       .getMany();
 
+      if(!borrowedBooks)
+      {
+        BorrowLogNotAvailableError()
+      }
+
     return borrowedBooks;
   }
 
@@ -97,7 +101,7 @@ export class BorrowTransactionsService {
     });
 
     if (!borrowLog) {
-      throw new ForbiddenException('no borrow logs for this user');
+      BorrowLogNotAvailableError()
     }
 
     borrowLog.status = 'returned';

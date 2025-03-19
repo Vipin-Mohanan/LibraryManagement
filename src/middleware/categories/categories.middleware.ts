@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { ForbiddenException, Injectable, NestMiddleware } from '@nestjs/common';
 import { verifyJwtToken } from 'src/modules/auth/jwt.util';
 

@@ -27,7 +27,7 @@ export class CreateBookDto {
      @Transform(({value})=>Number(value))
      @IsNumber()
      publication_year: number ;
-
+        
      @ApiProperty()
      @IsString()
      isbn: string;
@@ -47,7 +47,7 @@ export class CreateBookDto {
      @IsNumber()
      total_copies: number;
 
-     @ApiProperty()
+    @ApiProperty()
     @IsArray()
     @IsOptional()
     images?: Buffer[]; // Accept multiple binary image files

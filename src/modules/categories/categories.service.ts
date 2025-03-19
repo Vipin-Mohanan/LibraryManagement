@@ -1,9 +1,10 @@
 /* eslint-disable prettier/prettier */
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { Category } from './entities/category.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { AddCategoryError, CategoryNotFoundError } from 'src/filters/errorMessage';
 
 @Injectable()
 export class CategoriesService {
@@ -18,7 +19,7 @@ export class CategoriesService {
     const savedCategory = await this.categoryRepo.save(newCategory);
     if(!savedCategory)
       {
-        throw new Error('Cannot add category')
+        AddCategoryError()
       }
    
     return savedCategory;
@@ -29,9 +30,8 @@ export class CategoriesService {
 
     if(getAllCategories.length===0)
     {
-      throw new NotFoundException('No categories found')
+      CategoryNotFoundError()
     }
-
 
     return getAllCategories;
     

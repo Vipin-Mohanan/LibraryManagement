@@ -1,30 +1,37 @@
 /* eslint-disable prettier/prettier */
-import { Controller, Get, Post, Body} from '@nestjs/common';
+import { Controller, Get, Post, Body, UseGuards} from '@nestjs/common';
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
-import {  ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { UserAuthGuard } from 'src/guard/user-auth/user-auth.guard';
 
-@ApiTags('category')
+@ApiTags('categories')
 @Controller('categories')
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 
   @Post('/addCategory')
+  @UseGuards(UserAuthGuard)
+  @ApiOperation({ summary: 'Add a category' })
+  @ApiResponse({ status: 201, description: 'Insert a new category' })
   async addCategory(@Body() createCategoryDto: CreateCategoryDto) {
       const savedCategory = await this.categoriesService.addCategory(createCategoryDto);
-     return ({
-      status: "success",
-      data:savedCategory
-      });
+      return ({
+        status: "success",
+        data:savedCategory
+        });
   }
 
   @Get('/getAll')
+  @UseGuards(UserAuthGuard)
+  @ApiOperation({ summary: 'Get all categories' })
+  @ApiResponse({ status: 201, description: 'Displays all the available categories' })
   async getAllCategory(){
      const getAllCategories =await this.categoriesService.getAllCategory();
-    return ({
-      status:"Success",
-      data:getAllCategories
-    })
+      return ({
+        status:"Success",
+        data:getAllCategories
+      })
   }
 
   

@@ -1,12 +1,12 @@
-/* eslint-disable prettier/prettier */
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable} from '@nestjs/common';
 import { CreateBookDto } from './dto/create-book.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import {  Repository } from 'typeorm';
 import { Book } from './entities/book.entity';
 import { Category } from '../categories/entities/category.entity';
 import { UpdateBookDto } from './dto/update-book.dto';
 import * as fs from 'fs';
+import { BookNotFoundError, CategoryNotFoundError } from 'src/filters/errorMessage';
 
 @Injectable()
 export class BooksService {
@@ -16,83 +16,67 @@ export class BooksService {
     private readonly categoryRepo: Repository<Category>,
   ) {}
 
-  async addBook(bookDto: CreateBookDto, images: Buffer[]) {
-    // try {
-      const { category_id } = bookDto;
+  async addBook(bookDto: CreateBookDto,images: Buffer[]) {
+   
 
-      const category = await this.categoryRepo.findOne({
-        where: { category_id: category_id },
-      });
+   try {
+    const {category_id} =bookDto; 
+     
+    const category = await this.categoryRepo.findOne({where:{category_id:category_id}})
 
-      if (!category) {
-        throw new NotFoundException('Category not found');
-      }
+    if(!category){
+      CategoryNotFoundError()
+    }
 
-      const bookData = this.bookRepo.create({
-        title: bookDto.title,
-        author: bookDto.author,
-        description: bookDto.description,
-        publisher: bookDto.publisher,
-        publication_year: bookDto.publication_year,
-        isbn: bookDto.isbn,
-        category: category,
-        copies_available: bookDto.copies_available,
-        total_copies: bookDto.total_copies,
-        images: images,
-      });
-
-     this.bookRepo.save(bookData);
-
-      return {
-        status: 'Success',
-        data: bookData,
-      };
-    // } catch (error) {
-    //   throw error;
-    // }
+   const bookData = this.bookRepo.create({
+      title:bookDto.title,
+      author:bookDto.author,
+      description:bookDto.description,
+      publisher:bookDto.publisher,
+      publication_year:bookDto.publication_year,
+      isbn:bookDto.isbn,
+      category:category,
+      copies_available:bookDto.copies_available,
+      total_copies:bookDto.total_copies,
+      images:images
+    })
+    
+    await this.bookRepo.save(bookData)
+    return bookData
+  
+   } catch (error) {
+    throw error
+   }
   }
 
   async getAllBooks() {
-    // try {
+ 
       const books = await this.bookRepo.find();
 
-      if (books.length===0) {
-        throw new NotFoundException('Books not found');
+      if(books.length===0){
+        BookNotFoundError()      
       }
 
-      return {
-        status: 'Success',
-        data: books,
-      };
-    // } catch (error) {
-    //   if(error instanceof NotFoundException) throw error;
-    // }
+      return books;
+      
   }
 
   async getBooksById(id: number) {
-    // try {
+    
       const book = await this.bookRepo.findOne({
         where: { book_id: id },
         relations: ['category'],
       });
 
       if (!book) {
-        throw new NotFoundException('Books not found');
+        BookNotFoundError()  
       }
+      return book; 
 
-      return {
-        status: 'Success',
-        data: book,
-      };
-    // } catch (error) {
-    //   if(error instanceof NotFoundException) throw error;
-    //   console.error('error fetching book', error);
-    //   throw new Error('Could not fetch book');
-    // }
   }
 
   async searchBook(query: string) {
-    // try {
+    
       const book = await this.bookRepo
         .createQueryBuilder('book')
         .leftJoinAndSelect('book.category', 'category') // join the category table
@@ -103,29 +87,19 @@ export class BooksService {
         .getMany();
 
       if (book.length===0) {
-        throw new NotFoundException('Books not found');
+        BookNotFoundError()   
       }
 
-      return {
-        status: 'success',
-        data: book,
-      };
-    // } catch (error) {
-    //   if(error instanceof NotFoundException) throw error;
-    //   throw new Error('Could not fetch book');
-    // }
+      return book;
+    
   }
 
-  async editBookDetails(
-    id: number,
-    bookDto: UpdateBookDto,
-    images: Express.Multer.File[],
-  ) {
-    // try {
+  async editBookDetails(id: number,bookDto: UpdateBookDto,images: Express.Multer.File[],)
+   {
       const book = await this.bookRepo.findOne({ where: { book_id: id } });
 
       if (!book) {
-        throw new NotFoundException('Book not found');
+
       }
 
       if (images && images.length > 0) {
@@ -138,47 +112,32 @@ export class BooksService {
         );
       }
 
-      console.log('Book Images: ', book.images);
 
       //  Update book details
       const updatedBook = Object.assign(book, bookDto);
       await this.bookRepo.save(updatedBook);
       
-    
 
-      return {
-        status: 'success',
-        data: updatedBook,
-      };
-    // } catch (error) {
-    //   console.error('Cannot update book details', error);
-    //   throw new Error('Could not update');
-    // }
-  }
+      return updatedBook;
+      
+}
 
   async getAllBooksByCategory(id: number) {
-    // try {
       const books = await this.bookRepo.find({
         where: { category: { category_id: id } },
         relations: ['category'],
       });
 
       if (!books) {
-        throw new NotFoundException('Books not found');
-      }
+        BookNotFoundError()       
+        }
 
-      return {
-        status: 'success',
-        data: books,
-      };
-    // } catch (error) {
-    //   console.error('Error fetching books:', error);
-    //   throw new Error('Could not fetch books');
-    // }
+      return books;
+
   }
 
   async getAllBooksCategorywise() {
-    // try {
+
       const books = await this.bookRepo
         .createQueryBuilder('book')
         .leftJoinAndSelect('book.category', 'category')
@@ -186,8 +145,8 @@ export class BooksService {
         .getMany();
 
       if (books.length==0) {
-        throw new NotFoundException('Books not found');
-      }
+        BookNotFoundError()  
+             }
 
       const categorizedBooks = books.reduce((acc, book) => {
         const categoryName = book.category.category_name;
@@ -206,13 +165,7 @@ export class BooksService {
           books,
         }),
       );
-      return {
-        status: 'success',
-        data: categorizedBooksArray,
-      };
-    // } catch (error) {
-    //   console.log('Error fetching books categorywise', error);
-    //   throw new Error('Could not fetch books');
-    // }
+      return categorizedBooksArray;
+ 
   }
 }
