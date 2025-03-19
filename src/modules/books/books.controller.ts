@@ -87,13 +87,6 @@ export class BooksController {
   })
   }
 
-
-  /**
- * Retrieves all books grouped by their respective categories.
- * Only accessible to authenticated users.
- * @returns A response containing books categorized accordingly.
- */
-
   @Get('/getAllBooksCategorywise')
   @UseGuards(UserAuthGuard)
   @ApiOperation({ summary: 'Get all books categoryWise' })

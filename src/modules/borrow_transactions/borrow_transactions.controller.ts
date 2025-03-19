@@ -38,6 +38,7 @@ export class BorrowTransactionsController {
    * ```
    */
 
+  @ApiBearerAuth()
   @Post('/borrowBook')
   @UseGuards(UserAuthGuard)
   @ApiOperation({ summary: 'Borrow book' })
@@ -71,6 +72,7 @@ export class BorrowTransactionsController {
 
   @Get('/viewBorrowBooks/:id')
   @UseGuards(UserAuthGuard)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Borrow book details' })
   @ApiResponse({
     status: 201,
@@ -95,7 +97,7 @@ export class BorrowTransactionsController {
    * @returns {Promise<{ status: string; data: { returnDate: string } }>} 
   
    */
-
+  @ApiBearerAuth()
   @Patch('/return')
   @UseGuards(UserAuthGuard)
   @ApiOperation({ summary: 'Return the book' })

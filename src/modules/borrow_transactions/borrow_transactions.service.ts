@@ -129,6 +129,7 @@ export class BorrowTransactionsService {
       relations: ['user', 'books'],
     });
 
+    console.log(borrowLog)
     if (!borrowLog) {
       BorrowLogNotAvailableError();
     }
