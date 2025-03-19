@@ -14,6 +14,7 @@ import { UserAuthGuard } from '../../guard/user-auth/user-auth.guard';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('borrow')
+@ApiBearerAuth()
 @Controller('borrow')
 export class BorrowTransactionsController {
   constructor(
