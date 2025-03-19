@@ -3,9 +3,10 @@ import { Body, Controller, Post, UseGuards} from '@nestjs/common';
 import { LibrarianService } from './librarian.service';
 import { CreateLibrarianDto } from './dto/create-librarian.dto';
 import { AdminAuthGuard } from 'src/guard/admin-auth/admin-auth.guard';
+import { ApiTags } from '@nestjs/swagger';
 
 
-
+@ApiTags('librarian')
 @Controller('librarian')
 export class LibrarianController {
   constructor(private readonly librarianService: LibrarianService) {}

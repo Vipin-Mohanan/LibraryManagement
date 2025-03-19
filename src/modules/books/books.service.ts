@@ -2,7 +2,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateBookDto } from './dto/create-book.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeepPartial, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Book } from './entities/book.entity';
 import { Category } from '../categories/entities/category.entity';
 import { UpdateBookDto } from './dto/update-book.dto';

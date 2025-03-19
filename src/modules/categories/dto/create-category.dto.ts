@@ -1,12 +1,12 @@
 /* eslint-disable prettier/prettier */
 
-import { Column, PrimaryGeneratedColumn } from 'typeorm';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateCategoryDto {
 
-    @PrimaryGeneratedColumn()
+    @ApiProperty()
     category_id ?: number;
 
-    @Column()
+    @ApiProperty()
     category_name: string;
 }

@@ -14,12 +14,14 @@ import { memoryStorage } from 'multer';
 import { LibrarianAuthGuard } from '../../guard/librarian-auth/librarian-auth.guard';
 import { UserAuthGuard } from '../../guard/user-auth/user-auth.guard';
 import { addBookChecker } from './addBookChecker.util';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
-
+@ApiTags('books')
 @Controller('books')
 export class BooksController {
   constructor(private readonly booksService: BooksService) {}
 
+  @ApiOperation({ summary: 'add books' })
   @Post('/addBook')
   @UseGuards(LibrarianAuthGuard)
   @UseInterceptors(
@@ -42,13 +44,14 @@ export class BooksController {
     return await this.booksService.addBook(createBookDto, imageBuffer);
   }
 
+  @ApiOperation({ summary: 'get all books' })
   @Get('/getAllBooks')
   @UseGuards(UserAuthGuard)
   async getAllBooks() {
     return await this.booksService.getAllBooks();
   }
 
-
+  @ApiOperation({ summary: 'get all books categorywise' })
   @Get('/getAllBooksCategorywise')
   @UseGuards(UserAuthGuard)
   async getAllBooksCategorywise(){
@@ -56,6 +59,7 @@ export class BooksController {
   }
 
 
+  @ApiOperation({ summary: 'get all books by id' })
   @Get('/getBooksById/:id')
   @UseGuards(UserAuthGuard)
   async getBookById(@Param('id', ParseIntPipe) id: number) {

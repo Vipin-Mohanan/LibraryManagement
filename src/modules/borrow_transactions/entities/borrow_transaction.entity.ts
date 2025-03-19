@@ -1,7 +1,4 @@
 /* eslint-disable prettier/prettier */
-// import { Book } from 'src/modules/books/entities/book.entity';
-// import { Fine } from 'src/modules/fines/entities/fine.entity';
-// import { User } from 'src/modules/user/entities/user.entity';
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm"
 import { Book } from '../../books/entities/book.entity';
 import { Fine } from '../../fines/entities/fine.entity';

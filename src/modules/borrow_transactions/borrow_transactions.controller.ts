@@ -3,7 +3,8 @@ import { Controller, Get, Post, Body, Patch, Param, Query, UseGuards } from '@ne
 import { BorrowTransactionsService } from './borrow_transactions.service';
 import { CreateBorrowTransactionDto } from './dto/create-borrow_transaction.dto';
 import { UserAuthGuard } from '../../guard/user-auth/user-auth.guard';
-
+import { ApiTags } from '@nestjs/swagger';
+@ApiTags('borrow')
 @Controller('borrow')
 @UseGuards(UserAuthGuard)
 export class BorrowTransactionsController {

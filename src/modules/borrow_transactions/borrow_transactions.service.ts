@@ -83,6 +83,11 @@ export class BorrowTransactionsService {
 
   async updateReturnedBook(user_id:number, book_id:number) {
 
+    const bookData = await this.bookRepo.findOne({where:{
+      book_id:book_id}
+    })
+   
+
     const borrowLog = await this.borrowRep.findOne({
       where: {
         user: { user_id: user_id },
@@ -97,9 +102,14 @@ export class BorrowTransactionsService {
 
     borrowLog.status = 'returned';
     borrowLog.return_date = new Date();
+    
 
+ 
     const updatedBook =await this.borrowRep.save(borrowLog)
 
+    bookData.copies_available+=1;
+
+    await this.bookRepo.save(bookData)
     return updatedBook;
   }
 }
