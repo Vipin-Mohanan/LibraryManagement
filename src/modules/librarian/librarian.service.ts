@@ -10,10 +10,7 @@ import { UserAlreadyExistError } from 'src/filters/errorMessage';
 
 @Injectable()
 export class LibrarianService {
-   /**
-   * Injects repositories for Librarian and User entities.
-   * This allows database interactions using TypeORM.
-   */
+   
   constructor(@InjectRepository(Librarian) private readonly librarianRepository: Repository<Librarian>, 
               @InjectRepository(User) private readonly userRepository:Repository<User>){}
 

@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -16,10 +15,17 @@ export class AuthService {
     @InjectRepository(Librarian) private readonly librarianrepository: Repository<Librarian>,
   ) {}
 
+   /**
+   * Handles the authentication process for users and librarians.
+   * @param authDto - Contains the login credentials (email and password).
+   * @returns A JWT token along with user details if authentication is successful.
+   */
   async login(authDto: CreateAuthDto) {
 
+        // Extracts the email and password from the authentication DTO.
     const { email, password } = authDto;
     
+        // Searches for a librarian with the provided email in the Librarian repository.
     const user = await this.userrepository.findOne({ where: { email } });
 
     const librarian = await this.librarianrepository.findOne({where:{email}});
@@ -28,6 +34,7 @@ export class AuthService {
       UserNotFoundError()
     }
 
+        // Checks if the user exists and verifies the password.
    if(user!=null)
    {
     if (user && await bcrypt.compare(password, user.password)) {
@@ -43,6 +50,7 @@ export class AuthService {
     }
    }
 
+       // Checks if the librarian exists and verifies the password.
    else if(librarian!=null){
     if (librarian && await bcrypt.compare(password, librarian.password)) {
 

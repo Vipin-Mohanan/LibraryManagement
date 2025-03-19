@@ -8,11 +8,7 @@ dotenv.config();
 
 @Injectable()
 export class BooksMiddleware implements NestMiddleware {
-  use(req: any, res: any, next: () => void) {
-   
-    
-    
-    
+  use(req: any, res: any, next: () => void) { 
     next();
   }
 }

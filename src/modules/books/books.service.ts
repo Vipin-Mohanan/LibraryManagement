@@ -16,7 +16,13 @@ export class BooksService {
     private readonly categoryRepo: Repository<Category>,
   ) {}
 
-    // Add a new book to the database
+/**
+   * Adds a new book to the system.
+   * @param bookDto - The data transfer object containing book details.
+   * @param images - An array of image buffers for the book.
+   * @returns The newly added book object.
+   * @throws CategoryNotFoundError if the specified category does not exist.
+   */
   async addBook(bookDto: CreateBookDto,images: Buffer[]) {
    
 
@@ -52,8 +58,12 @@ export class BooksService {
    }
   }
 
-    // Retrieve all books
-  async getAllBooks() {
+ /**
+   * Retrieves all books from the database.
+   * @returns An array of book objects.
+   * @throws BookNotFoundError if no books are found.
+   */
+    async getAllBooks() {
  
       const books = await this.bookRepo.find();
 
@@ -65,8 +75,13 @@ export class BooksService {
       
   }
 
-    // Retrieve a single book by its ID
-  async getBooksById(id: number) {
+/**
+   * Retrieves a specific book by its ID.
+   * @param id - The unique identifier of the book.
+   * @returns The book object if found.
+   * @throws BookNotFoundError if the book does not exist.
+   */
+    async getBooksById(id: number) {
     
       const book = await this.bookRepo.findOne({
         where: { book_id: id },
@@ -80,8 +95,13 @@ export class BooksService {
 
   }
 
-    // Search books by title, author, ISBN, or category name
-  async searchBook(query: string) {
+ /**
+   * Searches for books based on title, author, ISBN, or category name.
+   * @param query - The search query string.
+   * @returns An array of books matching the search criteria.
+   * @throws BookNotFoundError if no matching books are found.
+   */
+    async searchBook(query: string) {
     
       const book = await this.bookRepo
         .createQueryBuilder('book')
@@ -100,8 +120,16 @@ export class BooksService {
     
   }
 
-    // Update book details by ID
-  async editBookDetails(id: number,bookDto: UpdateBookDto,images: Express.Multer.File[],)
+
+  /**
+   * Updates the details of an existing book.
+   * @param id - The unique identifier of the book.
+   * @param bookDto - The data transfer object containing updated book details.
+   * @param images - An array of uploaded image files.
+   * @returns The updated book object.
+   * @throws BookNotFoundError if the book does not exist.
+   */
+    async editBookDetails(id: number,bookDto: UpdateBookDto,images: Express.Multer.File[],)
    {
       const book = await this.bookRepo.findOne({ where: { book_id: id } });
 
@@ -130,8 +158,13 @@ export class BooksService {
       
 }
 
-  // Retrieve all books for a specific category
-  async getAllBooksByCategory(id: number) {
+  /**
+   * Retrieves all books belonging to a specific category.
+   * @param id - The unique identifier of the category.
+   * @returns An array of books within the specified category.
+   * @throws BookNotFoundError if no books are found in the category.
+   */
+    async getAllBooksByCategory(id: number) {
       const books = await this.bookRepo.find({
         where: { category: { category_id: id } },
         relations: ['category'],
@@ -145,8 +178,13 @@ export class BooksService {
 
   }
 
-  // Retrieve all books grouped by category
-  async getAllBooksCategorywise() {
+
+  /**
+   * Retrieves all books grouped by category.
+   * @returns An array of objects containing categories and their associated books.
+   * @throws BookNotFoundError if no books are found.
+   */
+    async getAllBooksCategorywise() {
 
       const books = await this.bookRepo
         .createQueryBuilder('book')

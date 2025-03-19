@@ -22,10 +22,14 @@ export class BooksController {
   constructor(private readonly booksService: BooksService) {}
 
  /**
-  * Adds a new book.
-  * Only accessible to librarians.
-  * Accepts multipart form-data for file uploads.
-  */
+ * Adds a new book to the system.
+ * Only accessible to librarians.
+ * Accepts multipart form-data for file uploads (up to 5 images).
+ * @param createBookDto - The data transfer object containing book details (e.g., title, author, category).
+ * @param files - An object containing uploaded images in buffer format.
+ * @returns A response indicating the success of the book addition along with the saved book data.
+ */
+
   @Post('/addBook')
   @UseGuards(LibrarianAuthGuard)
   @UseInterceptors(
@@ -65,9 +69,11 @@ export class BooksController {
   }
 
   /**
-   * Retrieves all books.
-   * Only accessible to authenticated users.
-   */
+ * Retrieves a list of all books available in the system.
+ * Only accessible to authenticated users.
+ * @returns A response containing an array of book objects.
+ */
+
   @Get('/getAllBooks')
   @UseGuards(UserAuthGuard)
   @ApiOperation({ summary: 'Get all books' })
@@ -82,10 +88,12 @@ export class BooksController {
   }
 
 
-    /**
-   * Retrieves all books categorized by their respective categories.
-   * Only accessible to authenticated users.
-   */
+  /**
+ * Retrieves all books grouped by their respective categories.
+ * Only accessible to authenticated users.
+ * @returns A response containing books categorized accordingly.
+ */
+
   @Get('/getAllBooksCategorywise')
   @UseGuards(UserAuthGuard)
   @ApiOperation({ summary: 'Get all books categoryWise' })
@@ -99,11 +107,13 @@ export class BooksController {
     })
   }
 
+/**
+ * Fetches the details of a specific book by its unique ID.
+ * Only accessible to authenticated users.
+ * @param id - The unique identifier of the book.
+ * @returns A response containing book details if found.
+ */
 
-   /**
-   * Retrieves details of a book by its ID.
-   * Only accessible to authenticated users.
-   */
   @Get('/getBooksById/:id')
   @UseGuards(UserAuthGuard)
   @ApiOperation({ summary: 'Get books by id' })
@@ -116,11 +126,13 @@ export class BooksController {
       data:book
     })
   }
+/**
+ * Retrieves all books belonging to a specific category based on the provided category ID.
+ * Only accessible to authenticated users.
+ * @param id - The unique identifier of the category.
+ * @returns A response containing an array of books within the specified category.
+ */
 
-    /**
-   * Retrieves books belonging to a specific category by category ID.
-   * Only accessible to authenticated users.
-   */
  @Get('/getBooksByCategoryId/:id')
  @UseGuards(UserAuthGuard)
  @ApiOperation({ summary: 'Get all books categoryWise' })
@@ -135,10 +147,13 @@ export class BooksController {
  }
 
  
-  /**
-   * Searches for books based on a given query string.
-   * Only accessible to authenticated users.
-   */
+ /**
+ * Searches for books based on a query string.
+ * Only accessible to authenticated users.
+ * @param query - The search string used to find relevant books (e.g., title, author).
+ * @returns A response containing matching books.
+ */
+
   @Get('/searchBook')
   @UseGuards(UserAuthGuard)
   @ApiOperation({ summary: 'Search Books' })
@@ -151,12 +166,17 @@ export class BooksController {
       data:bookData
     })
   }
+  
+/**
+ * Updates the details of an existing book based on its unique ID.
+ * Only accessible to librarians.
+ * Accepts file uploads for updating book images.
+ * @param id - The unique identifier of the book.
+ * @param bookDto - The data transfer object containing updated book details.
+ * @param images - An array of uploaded image files (optional).
+ * @returns A response containing the updated book details.
+ */
 
-  /**
-   * Edits the details of an existing book based on its ID.
-   * Only accessible to librarians.
-   * Accepts file uploads for book images.
-   */
   @Patch('/editBookDetails/:id')
   @UseGuards(LibrarianAuthGuard)
   @UseInterceptors(FileInterceptor('images')) 
