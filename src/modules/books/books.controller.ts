@@ -57,6 +57,7 @@ export class BooksController {
     })
   }
 
+  @ApiOperation({ summary: 'get all books' })
   @Get('/getAllBooks')
   @UseGuards(UserAuthGuard)
   @ApiOperation({ summary: 'Get all books' })
@@ -70,7 +71,7 @@ export class BooksController {
   })
   }
 
-
+  @ApiOperation({ summary: 'get all books categorywise' })
   @Get('/getAllBooksCategorywise')
   @UseGuards(UserAuthGuard)
   @ApiOperation({ summary: 'Get all books categoryWise' })
